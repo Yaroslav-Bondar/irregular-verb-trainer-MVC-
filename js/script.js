@@ -2,42 +2,27 @@ class Model {
     constructor(dictionaryUrl){
         this.dictionaryUrl = dictionaryUrl;
         this.dictionary;
-        // this._getDictionary();
     }
-    // bindSpinner() {
-
-    // }
     loadDictionary() {
         return fetch(this.dictionaryUrl)
-        // ; return res.json()
-            .then(res => res.json()/*{console.log(res.status)}*/)
-            // ; return true
-            .then(dict => {
-                // try {
-                    console.log(dict);
-                    // return Promise.resolve(dict);
-                    return dict; 
-                    // dict.json()
-                // }
-                // catch(er) {
-                //     throw er;
-                // } 
-            }/*, error => console.log('error ', error)*/)
-            // ; return false
-            .catch(error => {throw new Error(error)} /*{console.log('Error ', error); return Promise.reject(error)}*/);
-        // console.log('Hello');    
+            .then(res => res.json())
+            .then(dict => dict)
+            .catch(error => { throw new Error(error) } /* { return Promise.reject(error) } */);
     } 
 };
 class View {
     constructor() {
         this.root = document.getElementById('root');
         this.spinner = this.createElement('div', 'spinner');
-        this.root.append(this.spinner);
+        this.error = this.createElement('div', 'error');
+        this.root.append(this.spinner, this.error);
 
     }
     loadDOM() {  //
-        document.addEventListener('DOMContentLoaded', 
-        () => alert("Дерево DOM готово"))
+        document.addEventListener('DOMContentLoaded', () => {
+            alert("Дерево DOM готово");
+            console.log("Дерево DOM готово");
+        })
     }
     createElement(tag, className) {
         const element = document.createElement(tag);
@@ -65,14 +50,24 @@ class View {
     hideSpinner() {
         this.spinner.innerHTML = '';
     }
+    showError(error) {
+        this.error.innerHTML = 
+            `<div class="error__container">
+                <div class="error__message">
+                    <h3>No acces !!!</h3>
+                    <h5>${error}</h5>
+                    <p>please try again later</p>
+                </div>
+            </div>`;
+    }
 };
 class Controller {
     constructor(model, view) {
         this.model = model;
         this.view = view;
+        this.view.loadDOM();  //
         this.onInitialLoad(this.onloadDictionary);
         console.log('finish');
-        // this.view.loadDOM();  //
     }
     openSpinner = () => {
         this.view.showSpinner();
@@ -80,27 +75,32 @@ class Controller {
     closeSpinner = () => {
         this.view.hideSpinner();
     }
-    // , func2
-    onInitialLoad(func1) {
-        // , func2()
+    openError = (error) => {
+        this.view.showError(error);
+    }
+    onInitialLoad(func) {
+        // alert('Open Spinner');
+        console.log('Open Spinner');
         this.openSpinner();   
-        Promise.all([func1()])
+        alert('Open Spinner');
+        func()
         .then(res => {
             console.log('initial load OK', res); 
             // alert('initial load OK');
             this.closeSpinner();
         })
-        .catch(error => {console.log('initial load False', error.message)})
-        .then(()=> {console.log('All Ok')});
+        .catch(error => {
+            // console.log('initial load False', error.message); 
+            this.closeSpinner(); 
+            this.openError(error.message);
+        })
+        // .then(()=> {console.log('All Ok')});
     }
-    onloadDictionary = () => 
-    // {
-        // console.log(this.model.loadDictionary());
-        // return 
-        this.model.loadDictionary();
-    // }
+    onloadDictionary = () => this.model.loadDictionary();
 }
 
+// const runApp = window.onload = function(){ new Controller(new Model('../data/data.json'), new View())};
 const runApp = new Controller(new Model('../data/data.json'), new View());
+
 // console.log('Hello');    
 
