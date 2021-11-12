@@ -1,21 +1,27 @@
 class Model {
-    constructor(dictionaryUrl){
-        this.dictionaryUrl = dictionaryUrl;
-        this.dictionary;
+    constructor(verbsUrl){
+        this.verbsUrl = verbsUrl;
+        this.verbs;
+        // console.log(this.verbs[this.getRandomNumber(4)]);
     }
-    loadDictionary() {
-        return fetch(this.dictionaryUrl)
+    loadVerbs() {
+        return fetch(this.verbsUrl)
             .then(res => res.json())
-            .then(dict => dict)
+            .then(verbs => verbs)
             .catch(error => { throw new Error(error) } /* { return Promise.reject(error) } */);
-    } 
+    }
+    getRandomNumber = max => Math.floor(Math.random() * max);
 };
 class View {
     constructor() {
         this.root = document.getElementById('root');
         this.spinner = this.createElement('div', 'spinner');
         this.error = this.createElement('div', 'error');
-        this.root.append(this.spinner, this.error);
+        this.form = this.createElement('form', 'form');
+        this.input = this.createElement('input', 'form__input');
+        this.input.type = 'text';
+        this.form.append(...this._createCloneElements(this.input, 3));
+        this.root.append(this.spinner, this.error, this.form);
 
     }
     loadDOM() {  //
@@ -23,6 +29,11 @@ class View {
             alert("Дерево DOM готово");
             console.log("Дерево DOM готово");
         })
+    }
+    _createCloneElements(element, amount) {
+        let elements = [];
+        while(amount--) elements.push(element.cloneNode(true));
+        return elements;
     }
     createElement(tag, className) {
         const element = document.createElement(tag);
@@ -65,8 +76,12 @@ class Controller {
     constructor(model, view) {
         this.model = model;
         this.view = view;
-        this.view.loadDOM();  //
-        this.onInitialLoad(this.onloadDictionary);
+        // this.view.loadDOM();  //
+        this.onInitialLoad(this.onloadVerbs)
+        .then(verbs => {
+            this.model.verbs = verbs;
+            console.log(this.model.verbs[this.model.getRandomNumber(4)]);
+        });
         console.log('finish');
     }
     openSpinner = () => {
@@ -82,12 +97,14 @@ class Controller {
         // alert('Open Spinner');
         console.log('Open Spinner');
         this.openSpinner();   
-        alert('Open Spinner');
-        func()
-        .then(res => {
-            console.log('initial load OK', res); 
+        // alert('Open Spinner');
+        return func()
+        .then(verbs => {
+            console.log('initial load OK', verbs); 
             // alert('initial load OK');
             this.closeSpinner();
+            // console.log(this.model.verbs[this.model.getRandomNumber(this.model.verbs.length)]);
+            return verbs;
         })
         .catch(error => {
             // console.log('initial load False', error.message); 
@@ -95,12 +112,13 @@ class Controller {
             this.openError(error.message);
         })
         // .then(()=> {console.log('All Ok')});
+        // return Promise.resolve(1);
     }
-    onloadDictionary = () => this.model.loadDictionary();
+    onloadVerbs = () => this.model.loadVerbs();
 }
 
 // const runApp = window.onload = function(){ new Controller(new Model('../data/data.json'), new View())};
-const runApp = new Controller(new Model('../data/data.json'), new View());
+const runApp = new Controller(new Model('../daa/data.json'), new View());
 
 // console.log('Hello');    
 
