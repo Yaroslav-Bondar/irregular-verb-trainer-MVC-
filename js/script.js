@@ -10,25 +10,46 @@ class Model {
             .then(verbs => verbs)
             .catch(error => { throw new Error(error) } /* { return Promise.reject(error) } */);
     }
+    initVerbs(verbs) {
+        this.verbs = verbs;
+    }
     getRandomNumber = max => Math.floor(Math.random() * max);
 };
 class View {
     constructor() {
+        document.addEventListener('DOMContentLoaded', () => {
+            alert("Дерево DOM готово View");
+            console.log("Дерево DOM готово View");
+            // resolve();
+        });
         this.root = document.getElementById('root');
         this.spinner = this.createElement('div', 'spinner');
         this.error = this.createElement('div', 'error');
+        this.root.append(this.spinner, this.error);
         this.form = this.createElement('form', 'form');
         this.input = this.createElement('input', 'form__input');
         this.input.type = 'text';
         this.form.append(...this._createCloneElements(this.input, 3));
-        this.root.append(this.spinner, this.error, this.form);
-
+        
+    }
+    loadUI() {
+        // await async
+        // return new Promise(resolve => {
+            // function startRenderView () {
+            this.root.append(this.form);
+            // };
+            // resolve({task: 'load_UI', status: true});
+        // })
+        // .then(res => res, error => error);
     }
     loadDOM() {  //
-        document.addEventListener('DOMContentLoaded', () => {
-            alert("Дерево DOM готово");
-            console.log("Дерево DOM готово");
-        })
+        return new Promise((resolve, reject) => {
+            document.addEventListener('DOMContentLoaded', () => {
+                alert("Дерево DOM готово");
+                console.log("Дерево DOM готово");
+            });
+            return resolve([1]);
+        });
     }
     _createCloneElements(element, amount) {
         let elements = [];
@@ -77,48 +98,70 @@ class Controller {
         this.model = model;
         this.view = view;
         // this.view.loadDOM();  //
-        this.onInitialLoad(this.onloadVerbs)
+        alert('ddd')
+        // , this.onLoadUI
+        this.onInitialLoad(this.onLoadVerbs)
+        .finally(() => this.offSpinner())
         .then(verbs => {
-            this.model.verbs = verbs;
-            console.log(this.model.verbs[this.model.getRandomNumber(4)]);
+            this.onInitVerbs(verbs);
+            this.onLoadUI();
+            // this.model.verbs = verbs;
+            console.log('verbs = ', this.model.verbs);
+            // console.log(this.model.verbs[this.model.getRandomNumber(4)]);
+        })
+        .catch(error => {
+            console.log('initial load False', error.message); 
+            this.onError(error.message);
         });
         console.log('finish');
     }
-    openSpinner = () => {
-        this.view.showSpinner();
-    }
-    closeSpinner = () => {
-        this.view.hideSpinner();
-    }
-    openError = (error) => {
-        this.view.showError(error);
-    }
-    onInitialLoad(func) {
+    // , task3
+    // , task2
+    onInitialLoad(task1) {
         // alert('Open Spinner');
         console.log('Open Spinner');
-        this.openSpinner();   
+        this.onSpinner();   
+        alert('spinner opened');
         // alert('Open Spinner');
-        return func()
+        // task()
+        // , task3()
+        // , task2()
+        return Promise.all([task1()])
         .then(verbs => {
             console.log('initial load OK', verbs); 
             // alert('initial load OK');
-            this.closeSpinner();
+            // this.offSpinner();
             // console.log(this.model.verbs[this.model.getRandomNumber(this.model.verbs.length)]);
-            return verbs;
+            return verbs[0];
         })
         .catch(error => {
             // console.log('initial load False', error.message); 
-            this.closeSpinner(); 
-            this.openError(error.message);
+            // this.offSpinner(); 
+            // this.onError(error.message);
+            // return false; 
+            throw error;
+            // Promise.reject(1);
         })
         // .then(()=> {console.log('All Ok')});
-        // return Promise.resolve(1);
     }
-    onloadVerbs = () => this.model.loadVerbs();
+    onInitVerbs = verbs => {
+        this.model.initVerbs(verbs);
+    }
+    onSpinner = () => {
+        this.view.showSpinner();
+    }
+    offSpinner = () => {
+        this.view.hideSpinner();
+    }
+    onError = error => {
+        this.view.showError(error);
+    }
+    onLoadVerbs = () => this.model.loadVerbs();
+    onLoadUI = () => this.view.loadUI();
 }
 
 // const runApp = window.onload = function(){ new Controller(new Model('../data/data.json'), new View())};
-const runApp = new Controller(new Model('../daa/data.json'), new View());
+const runApp = new Controller(new Model('../data/data.json'), new View());
 
 // console.log('Hello');    
 
