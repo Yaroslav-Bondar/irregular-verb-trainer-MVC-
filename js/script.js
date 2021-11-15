@@ -2,6 +2,8 @@ class Model {
     constructor(verbsUrl){
         this.verbsUrl = verbsUrl;
         this.verbs;
+        this.randomVerb;
+        this.randomForm;
         // console.log(this.verbs[this.getRandomNumber(4)]);
     }
     loadVerbs() {
@@ -10,10 +12,21 @@ class Model {
             .then(verbs => verbs)
             .catch(error => { throw new Error(error) } /* { return Promise.reject(error) } */);
     }
-    initVerbs(verbs) {
+    setVerbs(verbs) {
         this.verbs = verbs;
     }
     getRandomNumber = max => Math.floor(Math.random() * max);
+
+    setRandomVerb() {
+        this.randomVerb = this.verbs[this.getRandomNumber(this.verbs.length)];
+    }
+    setRandomForm() {
+        this.randomForm = this.getRandomNumber(3);
+    }
+    setRandomVerbForm() {
+        this.setRandomVerb();
+        this.setRandomForm();
+    }
 };
 class View {
     constructor() {
@@ -30,6 +43,8 @@ class View {
         this.input = this.createElement('input', 'form__input');
         this.input.type = 'text';
         this.form.append(...this._createCloneElements(this.input, 3));
+
+        this.inputs;
         
     }
     loadUI() {
@@ -37,6 +52,7 @@ class View {
         // return new Promise(resolve => {
             // function startRenderView () {
             this.root.append(this.form);
+            this.inputs = this.root.getElementsByClassName('form__input');
             // };
             // resolve({task: 'load_UI', status: true});
         // })
@@ -60,6 +76,14 @@ class View {
         const element = document.createElement(tag);
         if(className) element.classList.add(className);
         return element;
+    }
+    displayVerbs(verbs, form) {
+        console.log(verbs, form);
+        verbs.forEach((item, index) => {
+            if(index < 3 && index !== form) {
+                this.inputs[index].value = item;
+            }
+        });
     }
     showSpinner() {
         this.spinner.innerHTML = 
@@ -103,14 +127,17 @@ class Controller {
         this.onInitialLoad(this.onLoadVerbs)
         .finally(() => this.offSpinner())
         .then(verbs => {
-            this.onInitVerbs(verbs);
+            this.onSetVerbs(verbs);
             this.onLoadUI();
+            this.onSetRandomVerbForm();
+            this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm); 
+
             // this.model.verbs = verbs;
-            console.log('verbs = ', this.model.verbs);
+            // console.log('verbs = ', this.model.verbs);
             // console.log(this.model.verbs[this.model.getRandomNumber(4)]);
         })
         .catch(error => {
-            console.log('initial load False', error.message); 
+            console.log('initial load False', error.stack); 
             this.onError(error.message);
         });
         console.log('finish');
@@ -144,8 +171,8 @@ class Controller {
         })
         // .then(()=> {console.log('All Ok')});
     }
-    onInitVerbs = verbs => {
-        this.model.initVerbs(verbs);
+    onSetVerbs = verbs => {
+        this.model.setVerbs(verbs);
     }
     onSpinner = () => {
         this.view.showSpinner();
@@ -158,6 +185,8 @@ class Controller {
     }
     onLoadVerbs = () => this.model.loadVerbs();
     onLoadUI = () => this.view.loadUI();
+    onSetRandomVerbForm = () => this.model.setRandomVerbForm();
+    onDisplayVerbs = (verb, form) => this.view.displayVerbs(verb, form);
 }
 
 // const runApp = window.onload = function(){ new Controller(new Model('../data/data.json'), new View())};
