@@ -4,6 +4,7 @@ class Model {
         this.verbs;
         this.randomVerb;
         this.randomForm;
+        // this.answer;
         // console.log(this.verbs[this.getRandomNumber(4)]);
     }
     loadVerbs() {
@@ -23,9 +24,39 @@ class Model {
     setRandomForm() {
         this.randomForm = this.getRandomNumber(3);
     }
+    // setAnswer() {
+    //     this.answer = this.randomVerb[this.randomForm];
+    // }
     setRandomVerbForm() {
         this.setRandomVerb();
         this.setRandomForm();
+        // this.setAnswer();
+    }
+    checkAnswer(answer) {
+        // if() /* ^\s*\bwere\b\s*$ */
+        // let regValid = /^\s*\b[a-z]+\b\s*$/i;
+        let regVerb = new RegExp(`\\b${answer.trim()}\\b`, 'i');
+        
+        if(/^\s*[a-z]+\s*$/i.test(answer)) {
+            console.log('valid', true);
+        }
+        else {
+            console.log('valid', false);
+        }
+
+        if(regVerb.test(this.randomVerb[this.randomForm])) {
+            console.log('verb', true);
+        }
+        else {
+            console.log('verb', false);
+        }
+        // let answer = 'wer';
+        // let reg = /^\s*\b[a-z]*\b\s*$/i;
+        // let reg2 = new RegExp(`${answer}`, 'i');
+        // let verb = 'was/were';
+        
+        // console.log(reg.test(answer));
+        // console.log(reg2.test(verb));
     }
 };
 class View {
@@ -43,6 +74,7 @@ class View {
         this.input = this.createElement('input', 'form__input');
         this.input.type = 'text';
         this.form.append(...this._createCloneElements(this.input, 3));
+        this.answer = this.createElement('div', 'answer');
 
         this.inputs;
         
@@ -51,7 +83,7 @@ class View {
         // await async
         // return new Promise(resolve => {
             // function startRenderView () {
-            this.root.append(this.form);
+            this.root.append(this.form, this.answer);
             this.inputs = this.root.getElementsByClassName('form__input');
             // };
             // resolve({task: 'load_UI', status: true});
@@ -78,10 +110,24 @@ class View {
         return element;
     }
     displayVerbs(verbs, form) {
-        console.log(verbs, form);
+        // console.log(verbs, form);
         verbs.forEach((item, index) => {
             if(index < 3 && index !== form) {
                 this.inputs[index].value = item;
+            }
+        });
+    }
+    displayAnswer(verbs, form) {
+        this.answer.innerHTML = verbs[form];
+    }
+    bindEditVerb(handler) {
+        // console.log(this.form);
+        this.form.addEventListener('change', event => {
+            // console.log(event);
+            if(event.target.className === 'form__input') {
+                // console.log('I am handler ', event.target.value);
+                // handler(event.target.value);
+                handler(event.target.value);
             }
         });
     }
@@ -116,6 +162,7 @@ class View {
                 </div>
             </div>`;
     }
+
 };
 class Controller {
     constructor(model, view) {
@@ -130,8 +177,10 @@ class Controller {
             this.onSetVerbs(verbs);
             this.onLoadUI();
             this.onSetRandomVerbForm();
-            this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm); 
-
+            this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm);
+            this.onDisplayAnswer(this.model.randomVerb, this.model.randomForm);
+            this.view.bindEditVerb(this.handleEditVerb);
+            
             // this.model.verbs = verbs;
             // console.log('verbs = ', this.model.verbs);
             // console.log(this.model.verbs[this.model.getRandomNumber(4)]);
@@ -142,34 +191,22 @@ class Controller {
         });
         console.log('finish');
     }
-    // , task3
-    // , task2
     onInitialLoad(task1) {
         // alert('Open Spinner');
         console.log('Open Spinner');
         this.onSpinner();   
         alert('spinner opened');
         // alert('Open Spinner');
-        // task()
-        // , task3()
         // , task2()
         return Promise.all([task1()])
         .then(verbs => {
             console.log('initial load OK', verbs); 
             // alert('initial load OK');
-            // this.offSpinner();
-            // console.log(this.model.verbs[this.model.getRandomNumber(this.model.verbs.length)]);
             return verbs[0];
         })
         .catch(error => {
-            // console.log('initial load False', error.message); 
-            // this.offSpinner(); 
-            // this.onError(error.message);
-            // return false; 
             throw error;
-            // Promise.reject(1);
         })
-        // .then(()=> {console.log('All Ok')});
     }
     onSetVerbs = verbs => {
         this.model.setVerbs(verbs);
@@ -187,6 +224,9 @@ class Controller {
     onLoadUI = () => this.view.loadUI();
     onSetRandomVerbForm = () => this.model.setRandomVerbForm();
     onDisplayVerbs = (verb, form) => this.view.displayVerbs(verb, form);
+    onDisplayAnswer = (verb, form) => this.view.displayAnswer(verb, form);
+    handleEditVerb = answer => this.model.checkAnswer(answer);
+    // bindEditTodo
 }
 
 // const runApp = window.onload = function(){ new Controller(new Model('../data/data.json'), new View())};
