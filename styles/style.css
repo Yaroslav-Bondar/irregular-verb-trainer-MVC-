@@ -20,7 +20,7 @@
 
 }
 body {
-    background-color: #a8eb12;
+    background-color: forestgreen;
 }
 .spinner__container {
     position: fixed;
@@ -47,4 +47,14 @@ body {
     background-color: var(--color-error-light);
     box-shadow: var(--box-shadow);
     color: var(--color-white);
+}
+/* .answer {
+    display: none;
+} */
+.answer__show {
+    /* display: block; */
+    background-color:#a8eb12;
+}
+.form__input_confirmed {
+    background-color: #a8eb12;
 }
