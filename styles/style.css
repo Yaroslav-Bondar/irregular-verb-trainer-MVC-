@@ -55,6 +55,10 @@ body {
     /* display: block; */
     background-color:#a8eb12;
 }
+.form__input {
+    background-color: #fff;
+    color: #000;
+}
 .form__input_confirmed {
     background-color: #a8eb12;
 }
