@@ -1,70 +1,38 @@
 class Model {
-    constructor(verbsUrl){
+    constructor(verbsUrl) {
         this.verbsUrl = verbsUrl;
-        this.verbs;
-        this.randomVerb;
-        this.randomForm;
+        // this.verbs;
+        // this.randomVerb;
+        // this.randomForm;  // ? 
+        // this.nativeVerb;
         this.checkInputReg = /^\s*[a-z]+\s*$/i;
-        // this.checkAnswerReg = `\\b${answer.trim()}\\b`; // * get answer from view checkAnswer
-
-        // this.answer;
-        // console.log(this.verbs[this.getRandomNumber(4)]);
+    }
+    get MAX_VERB_INDEX() {
+        return 3;
+    }
+    set MAX_VERB_INDEX(value) {
+        throw new Error('MAX_VERB_INDEX is immutable');
     }
     loadVerbs() {
         return fetch(this.verbsUrl)
             .then(res => res.json())
-            .then(verbs => verbs)
+            .then(verbs => this.verbs = verbs)
             .catch(error => { throw new Error(error) } /* { return Promise.reject(error) } */);
     }
-    setVerbs(verbs) {
-        this.verbs = verbs;
-    }
     getRandomNumber = max => Math.floor(Math.random() * max);
-
-    setRandomVerb() {
-        this.randomVerb = this.verbs[this.getRandomNumber(this.verbs.length)];
-    }
-    setRandomForm() {
-        this.randomForm = this.getRandomNumber(3);
-    }
-    // setAnswer() {
-    //     this.answer = this.randomVerb[this.randomForm];
-    // }
-    setRandomVerbForm() {
-        this.setRandomVerb();
-        this.setRandomForm();
-        // this.setAnswer();
+    setRandomVerbData() {
+        let randomVerbPack = this.verbs[this.getRandomNumber(this.verbs.length)];
+        this.randomVerb = randomVerbPack.filter((item, index) => {
+            return index < this.MAX_VERB_INDEX;
+        });
+        this.randomForm = this.getRandomNumber(this.MAX_VERB_INDEX);
+        this.nativeVerb = randomVerbPack[this.MAX_VERB_INDEX];
     }
     checkAnswer(answer) {
-        // if() /* ^\s*\bwere\b\s*$ */
-        // let regValid = /^\s*\b[a-z]+\b\s*$/i;
-        // let regVerb = new RegExp(`\\b${answer.trim()}\\b`, 'i');
         let checkInput, checkAnswer;
-        if(this.checkInputReg.test(answer)) {  // go out reg exp !
-            console.log('valid', true);
-            checkInput = true;
-        }
-        else {
-            console.log('valid', false);
-            checkInput = false;
-        }
-
-        if(new RegExp(`\\b${answer.trim()}\\b`, 'i').test(this.randomVerb[this.randomForm])) {
-            console.log('verb', true);
-            checkAnswer = true;
-        }
-        else {
-            console.log('verb', false);
-            checkAnswer = false;
-        }
+        checkInput = this.checkInputReg.test(answer) ? true : false;
+        checkAnswer = new RegExp(`\\b${answer.trim()}\\b`, 'i').test(this.randomVerb[this.randomForm]) ? true : false;
         return checkInput && checkAnswer ? true : false;
-        // let answer = 'wer';
-        // let reg = /^\s*\b[a-z]*\b\s*$/i;
-        // let reg2 = new RegExp(`${answer}`, 'i');
-        // let verb = 'was/were';
-        
-        // console.log(reg.test(answer));
-        // console.log(reg2.test(verb));
     }
 };
 class View {
@@ -72,7 +40,6 @@ class View {
         document.addEventListener('DOMContentLoaded', () => {
             alert("Дерево DOM готово View");
             console.log("Дерево DOM готово View");
-            // resolve();
         });
         this.root = document.getElementById('root');
         this.spinner = this.createElement('div', 'spinner');
@@ -90,44 +57,37 @@ class View {
     showSpinner() {
         this.spinner.innerHTML = 
         `<div class="spinner__container">
-        <svg width="200" height="200" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-        viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
-        <path fill="gray" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
-        <animateTransform 
-        attributeName="transform" 
-        attributeType="XML" 
-        type="rotate"
+            <svg width="200" height="200" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
+                <path fill="gray" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                    <animateTransform 
+                    attributeName="transform" 
+                    attributeType="XML" 
+                    type="rotate"
                     dur="1s" 
                     from="0 50 50"
                     to="360 50 50" 
                     repeatCount="indefinite" />
                 </path>
-                </svg>
-            <div>`;
-        }
-        hideSpinner() {
-            this.spinner.innerHTML = '';
+            </svg>
+        <div>`;
+    }
+    hideSpinner() {
+        this.spinner.innerHTML = '';
     }
     showError(error) {
         this.error.innerHTML = 
         `<div class="error__container">
-        <div class="error__message">
-        <h3>No acces !!!</h3>
-        <h5>${error}</h5>
-        <p>please try again later</p>
-        </div>
+            <div class="error__message">
+                <h3>No acces !!!</h3>
+                <h5>${error}</h5>
+                <p>please try again later</p>
+            </div>
         </div>`;
     }
     loadUI() {
-        // await async
-        // return new Promise(resolve => {
-            // function startRenderView () {
             this.root.append(this.form, this.answer);
             this.inputs = this.root.getElementsByClassName('form__input');
-            // };
-            // resolve({task: 'load_UI', status: true});
-        // })
-        // .then(res => res, error => error);
     }
     loadDOM() {  //
         return new Promise((resolve, reject) => {
@@ -150,28 +110,20 @@ class View {
     }
     displayVerbs(verbs, form) {
         verbs.forEach((item, index) => {
-            if(index < 3) {
-                if(index !== form) {
-                    this.inputs[index].value = item;
-                    this.inputs[index].disabled = true;
-                }
-                // && this.inputs[index].value
-                if(index === form) {  // * without index
-                    this.inputs[index].value = '';
-                    this.inputs[form].disabled = false;
-                    this.inputs[form].focus();
-                }
+            if(index !== form) {
+                this.inputs[index].value = item;
+                this.inputs[index].disabled = true;
+            }
+            else {  
+                this.inputs[form].value = '';
+                this.inputs[form].disabled = false;
+                this.inputs[form].focus();
             }
         });
     }
     bindEditVerb(handler) {
-        // console.log(this.form);
         this.form.addEventListener('change', event => {
-            // console.log(event);
             if(event.target.className === 'form__input') {
-                // console.log('I am handler ', event.target.value);
-                // handler(event.target.value);
-                // handler.call(runApp, event.target.value);  // * call: it must knows the runApp
                 handler(event.target.value);
             }
         });
@@ -206,15 +158,12 @@ class Controller {
     constructor(model, view) {
         this.model = model;
         this.view = view;
-        // this.view.loadDOM();  //
         alert('ddd')
-        // , this.onLoadUI
         this.onInitialLoad(this.onLoadVerbs)
         .finally(() => this.offSpinner())
-        .then(verbs => {
-            this.onSetVerbs(verbs);  // possibly without it ?
+        .then(() => {
             this.onLoadUI();
-            this.onSetRandomVerbForm();
+            this.onSetRandomVerbData();
             this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm);
             // this.onDisplayAnswer(this.model.randomVerb, this.model.randomForm);
             this.view.bindEditVerb(this.bindHandleEditVerb);
@@ -241,7 +190,7 @@ class Controller {
         //  
         await this.view.resetSignals();
         // setTimeout(()=> {this.view.resetSignals()}, 2000);
-        this.onSetRandomVerbForm();
+        this.onSetRandomVerbData();
         this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm);
     };
     bindHandleEditVerb = this.handleEditVerb.bind(this);
@@ -256,14 +205,11 @@ class Controller {
         .then(verbs => {
             console.log('initial load OK', verbs); 
             // alert('initial load OK');
-            return verbs[0];
+            // return verbs[0];
         })
         .catch(error => {
             throw error;
         })
-    }
-    onSetVerbs = verbs => {
-        this.model.setVerbs(verbs);
     }
     onSpinner = () => {
         this.view.showSpinner();
@@ -276,7 +222,7 @@ class Controller {
     }
     onLoadVerbs = () => this.model.loadVerbs();
     onLoadUI = () => this.view.loadUI();
-    onSetRandomVerbForm = () => this.model.setRandomVerbForm();
+    onSetRandomVerbData = () => this.model.setRandomVerbData();
     onDisplayVerbs = (verb, form) => this.view.displayVerbs(verb, form);
     onDisplayAnswer = (verb, form) => this.view.displayAnswer(verb, form);
     onConfirmAnswer = form => this.view.confirmAnswer(form);
