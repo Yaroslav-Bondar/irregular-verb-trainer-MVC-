@@ -1,9 +1,34 @@
-<p>...содержимое до скрипта...</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="img/favicon-192x192.png">
+    <link rel="stylesheet" href="styles/style.css">
+    <title>Irregular verbs trainer</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      alert("DOM готов!");
+    });
+  </script>
+  <script>
+    let root = document.getElementById('root');
+      let add = document.createElement('div');
+      add.classList.add('spinner');
+      add.innerHTML = 'dddd'
+      root.append(add);
+      alert(document.getElementsByClassName('spinner'));
+      alert('add added');
+      // console.log(root);
+  </script>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => alert("Дерево DOM готово после скрипта с 'defer'!")); // (2)
-</script>
-<!-- defer  -->
-<script src="https://javascript.info/article/script-async-defer/long.js?speed=1"></script>
-
-<p>...содержимое после скрипта...</p>
+    
+    
+<!-- <script src="js/view/constantsView.js"></script> -->
+<!-- <script src="js/script.js"></script> -->    
+</body>
+</html>

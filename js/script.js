@@ -4,10 +4,10 @@ class Model {
         // this.verbs;
         // this.randomVerb;
         // this.randomForm;  // ? 
-        // this.nativeVerb;
+        // this.nativeVerb = 'fff';
         this.checkInputReg = /^\s*[a-z]+\s*$/i;
     }
-    get MAX_VERB_INDEX() {
+    get MAX_VERB_INDEX() {   // constant inside the class
         return 3;
     }
     set MAX_VERB_INDEX(value) {
@@ -17,7 +17,7 @@ class Model {
         return fetch(this.verbsUrl)
             .then(res => res.json())
             .then(verbs => this.verbs = verbs)
-            .catch(error => { throw new Error(error) } /* { return Promise.reject(error) } */);
+            .catch(error => { throw new Error(error) } /* { (===) or return Promise.reject(error) } */);
     }
     getRandomNumber = max => Math.floor(Math.random() * max);
     setRandomVerbData() {
@@ -37,22 +37,9 @@ class Model {
 };
 class View {
     constructor() {
-        document.addEventListener('DOMContentLoaded', () => {
-            alert("Дерево DOM готово View");
-            console.log("Дерево DOM готово View");
-        });
         this.root = document.getElementById('root');
         this.spinner = this.createElement('div', 'spinner');
-        this.error = this.createElement('div', 'error');
-        this.root.append(this.spinner, this.error);
-        this.form = this.createElement('form', 'form');
-        this.input = this.createElement('input', 'form__input');
-        this.input.type = 'text';
-        this.form.append(...this._createCloneElements(this.input, 3));
-        this.answer = this.createElement('div', 'answer');
-
-        this.inputs;
-        
+        this.root.append(this.spinner);
     }
     showSpinner() {
         this.spinner.innerHTML = 
@@ -86,16 +73,21 @@ class View {
         </div>`;
     }
     loadUI() {
-            this.root.append(this.form, this.answer);
-            this.inputs = this.root.getElementsByClassName('form__input');
+        this.form = this.createElement('form', 'form');
+        this.input = this.createElement('input', 'form__input');
+        this.input.type = 'text';
+        this.nativeVerbNode = this.createElement('div', 'verb__native');
+        this.form.append(this.nativeVerbNode, ...this._createCloneElements(this.input, 3));
+        this.error = this.createElement('div', 'error');
+        this.answer = this.createElement('div', 'answer');
+        this.root.append(this.error, this.form, this.answer);
+        this.inputs = this.root.getElementsByClassName('form__input');
     }
-    loadDOM() {  //
-        return new Promise((resolve, reject) => {
+    loadDOM() {  
+        return new Promise(resolve => {
             document.addEventListener('DOMContentLoaded', () => {
-                alert("Дерево DOM готово");
-                console.log("Дерево DOM готово");
+                resolve('DOM fully loaded and parsed');
             });
-            return resolve([1]);
         });
     }
     _createCloneElements(element, amount) {
@@ -108,7 +100,8 @@ class View {
         if(className) element.classList.add(className);
         return element;
     }
-    displayVerbs(verbs, form) {
+    displayVerbs(verbs, form, nativeVerb) {
+        this.nativeVerbNode.innerHTML = nativeVerb;
         verbs.forEach((item, index) => {
             if(index !== form) {
                 this.inputs[index].value = item;
@@ -130,27 +123,30 @@ class View {
     }
     displayAnswer(verbs, form) {
         this.answer.innerHTML = verbs[form];
-        this.answer.classList.add('answer__show');
-        this.inputs[form].disabled = true;  // *
+        this.answer.classList.add('answer__backlight');
+        this.inputs[form].disabled = true;  
     }
     confirmAnswer(form) {
-        // console.log(form);
-        // console.log(this.input);
         this.inputs[form].classList.add('form__input_confirmed');
-        this.inputs[form].disabled = true;  // *
-        // this.answer.classList.add('answer__show');
+        this.inputs[form].disabled = true;  
     }
     resetSignals() {
         return new Promise(resolve => {
+            let delay = 2000, isAnswer;
+            if(isAnswer = this.answer.classList.contains('answer__backlight')) delay = 3500;
             setTimeout(()=> {
-                this.answer.innerHTML = '';
-                this.answer.classList.remove('answer__show');
-                for (const input of this.inputs) {
-                    if(input.classList.contains('form__input_confirmed'))
-                        input.classList.remove('form__input_confirmed');
+                if(isAnswer) {
+                    this.answer.innerHTML = '';
+                    this.answer.classList.remove('answer__backlight');
+                }
+                else {
+                    for (const input of this.inputs) {
+                        if(input.classList.contains('form__input_confirmed'))
+                            input.classList.remove('form__input_confirmed');
+                    }
                 }
                 return resolve();
-            }, 3000);
+            }, delay);
         });
     }
 };
@@ -158,54 +154,41 @@ class Controller {
     constructor(model, view) {
         this.model = model;
         this.view = view;
-        alert('ddd')
-        this.onInitialLoad(this.onLoadVerbs)
+        this.onInitialLoad(this.onLoadVerbs, this.onLoadDOM)
         .finally(() => this.offSpinner())
         .then(() => {
             this.onLoadUI();
             this.onSetRandomVerbData();
-            this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm);
-            // this.onDisplayAnswer(this.model.randomVerb, this.model.randomForm);
+            this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm, this.model.nativeVerb);
             this.view.bindEditVerb(this.bindHandleEditVerb);
-            
-            // this.model.verbs = verbs;
-            // console.log('verbs = ', this.model.verbs);
-            // console.log(this.model.verbs[this.model.getRandomNumber(4)]);
         })
         .catch(error => {
             console.log('initial load False', error.stack); 
             this.onError(error.message);
         });
-        console.log('finish');
+        // console.log('finish');
     }
-    // 
     async handleEditVerb(answer) {
-        // console.log('checkAnswer', this.model.checkAnswer(answer));
         if(this.model.checkAnswer(answer)) {
             this.onConfirmAnswer(this.model.randomForm);
         }
         else {
             this.onDisplayAnswer(this.model.randomVerb, this.model.randomForm);
         }
-        //  
         await this.view.resetSignals();
-        // setTimeout(()=> {this.view.resetSignals()}, 2000);
         this.onSetRandomVerbData();
-        this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm);
+        this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm, this.model.nativeVerb);
     };
     bindHandleEditVerb = this.handleEditVerb.bind(this);
-    onInitialLoad(task1) {
+    onInitialLoad(loadVerbs, loadDOM) {
         // alert('Open Spinner');
-        console.log('Open Spinner');
+        // console.log('Open Spinner');
         this.onSpinner();   
-        alert('spinner opened');
-        // alert('Open Spinner');
-        // , task2()
-        return Promise.all([task1()])
-        .then(verbs => {
-            console.log('initial load OK', verbs); 
+        // alert('spinner opened');
+        return Promise.all([loadVerbs(), loadDOM()])
+        .then(tasks => {
+            console.log('initial load OK', tasks); 
             // alert('initial load OK');
-            // return verbs[0];
         })
         .catch(error => {
             throw error;
@@ -221,12 +204,12 @@ class Controller {
         this.view.showError(error);
     }
     onLoadVerbs = () => this.model.loadVerbs();
+    onLoadDOM = () => this.view.loadDOM();
     onLoadUI = () => this.view.loadUI();
     onSetRandomVerbData = () => this.model.setRandomVerbData();
-    onDisplayVerbs = (verb, form) => this.view.displayVerbs(verb, form);
+    onDisplayVerbs = (verb, form, nativeVerb) => this.view.displayVerbs(verb, form, nativeVerb);
     onDisplayAnswer = (verb, form) => this.view.displayAnswer(verb, form);
     onConfirmAnswer = form => this.view.confirmAnswer(form);
-    // bindEditTodo
 }
 
 // const runApp = window.onload = function(){ new Controller(new Model('../data/data.json'), new View())};

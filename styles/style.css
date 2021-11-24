@@ -51,7 +51,7 @@ body {
 /* .answer {
     display: none;
 } */
-.answer__show {
+.answer__backlight {
     /* display: block; */
     background-color:#a8eb12;
 }
