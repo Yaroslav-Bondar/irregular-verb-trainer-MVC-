@@ -1,10 +1,7 @@
 class Model {
     constructor(verbsUrl) {
         this.verbsUrl = verbsUrl;
-        // this.verbs;
-        // this.randomVerb;
-        // this.randomForm;  // ? 
-        // this.nativeVerb = 'fff';
+        // this.verbs; this.randomVerb; this.randomForm; this.nativeVerb; // property list
         this.checkInputReg = /^\s*[a-z]+\s*$/i;
     }
     get MAX_VERB_INDEX() {   // constant inside the class
@@ -17,7 +14,7 @@ class Model {
         return fetch(this.verbsUrl)
             .then(res => res.json())
             .then(verbs => this.verbs = verbs)
-            .catch(error => { throw new Error(error) } /* { (===) or return Promise.reject(error) } */);
+            .catch(error => { throw new Error(error) });/* { (===) or return Promise.reject(error) } */
     }
     getRandomNumber = max => Math.floor(Math.random() * max);
     setRandomVerbData() {
@@ -39,7 +36,8 @@ class View {
     constructor() {
         this.root = document.getElementById('root');
         this.spinner = this.createElement('div', 'spinner');
-        this.root.append(this.spinner);
+        this.error = this.createElement('div', 'error');
+        this.root.append(this.spinner, this.error);
     }
     showSpinner() {
         this.spinner.innerHTML = 
@@ -78,9 +76,8 @@ class View {
         this.input.type = 'text';
         this.nativeVerbNode = this.createElement('div', 'verb__native');
         this.form.append(this.nativeVerbNode, ...this._createCloneElements(this.input, 3));
-        this.error = this.createElement('div', 'error');
         this.answer = this.createElement('div', 'answer');
-        this.root.append(this.error, this.form, this.answer);
+        this.root.append(this.form, this.answer);
         this.inputs = this.root.getElementsByClassName('form__input');
     }
     loadDOM() {  
@@ -130,7 +127,7 @@ class View {
         this.inputs[form].classList.add('form__input_confirmed');
         this.inputs[form].disabled = true;  
     }
-    resetSignals() {
+    resetMessage() {
         return new Promise(resolve => {
             let delay = 2000, isAnswer;
             if(isAnswer = this.answer.classList.contains('answer__backlight')) delay = 3500;
@@ -154,7 +151,11 @@ class Controller {
     constructor(model, view) {
         this.model = model;
         this.view = view;
-        this.onInitialLoad(this.onLoadVerbs, this.onLoadDOM)
+        this.run(this.onLoadVerbs, this.onLoadDOM);
+    }
+    run(loadVerbs, loadDOM) {
+        this.onSpinner();   
+        Promise.all([loadVerbs(), loadDOM()])  // tasks before launch
         .finally(() => this.offSpinner())
         .then(() => {
             this.onLoadUI();
@@ -163,57 +164,34 @@ class Controller {
             this.view.bindEditVerb(this.bindHandleEditVerb);
         })
         .catch(error => {
-            console.log('initial load False', error.stack); 
             this.onError(error.message);
-        });
-        // console.log('finish');
-    }
+            console.log(error.stack); 
+        })
+    };
     async handleEditVerb(answer) {
-        if(this.model.checkAnswer(answer)) {
+        if(this.onCheckAnswer(answer)) {
             this.onConfirmAnswer(this.model.randomForm);
         }
         else {
             this.onDisplayAnswer(this.model.randomVerb, this.model.randomForm);
         }
-        await this.view.resetSignals();
+        await this.onResetMessage();
         this.onSetRandomVerbData();
         this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm, this.model.nativeVerb);
     };
-    bindHandleEditVerb = this.handleEditVerb.bind(this);
-    onInitialLoad(loadVerbs, loadDOM) {
-        // alert('Open Spinner');
-        // console.log('Open Spinner');
-        this.onSpinner();   
-        // alert('spinner opened');
-        return Promise.all([loadVerbs(), loadDOM()])
-        .then(tasks => {
-            console.log('initial load OK', tasks); 
-            // alert('initial load OK');
-        })
-        .catch(error => {
-            throw error;
-        })
-    }
-    onSpinner = () => {
-        this.view.showSpinner();
-    }
-    offSpinner = () => {
-        this.view.hideSpinner();
-    }
-    onError = error => {
-        this.view.showError(error);
-    }
+    bindHandleEditVerb = this.handleEditVerb.bind(this); // binding a context to a callback function
+    onSpinner = () => this.view.showSpinner();
+    offSpinner = () => this.view.hideSpinner();
+    onError = error => this.view.showError(error);
     onLoadVerbs = () => this.model.loadVerbs();
     onLoadDOM = () => this.view.loadDOM();
     onLoadUI = () => this.view.loadUI();
     onSetRandomVerbData = () => this.model.setRandomVerbData();
     onDisplayVerbs = (verb, form, nativeVerb) => this.view.displayVerbs(verb, form, nativeVerb);
+    onCheckAnswer = answer => this.model.checkAnswer(answer);
     onDisplayAnswer = (verb, form) => this.view.displayAnswer(verb, form);
     onConfirmAnswer = form => this.view.confirmAnswer(form);
+    onResetMessage = () => this.view.resetMessage();
 }
 
-// const runApp = window.onload = function(){ new Controller(new Model('../data/data.json'), new View())};
 const runApp = new Controller(new Model('../data/data.json'), new View());
-
-// console.log('Hello');    
-
