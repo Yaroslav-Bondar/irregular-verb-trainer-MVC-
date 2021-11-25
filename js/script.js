@@ -121,26 +121,27 @@ class View {
     displayAnswer(verbs, form) {
         this.answer.innerHTML = verbs[form];
         this.answer.classList.add('answer__backlight');
-        this.inputs[form].disabled = true;  
     }
     confirmAnswer(form) {
         this.inputs[form].classList.add('form__input_confirmed');
         this.inputs[form].disabled = true;  
     }
-    resetMessage() {
+    rejectAnswer(form) {
+        this.inputs[form].classList.add('form__input_rejected');
+        this.inputs[form].disabled = true;  
+    }
+    resetMessage(form) {
         return new Promise(resolve => {
-            let delay = 2000, isAnswer;
-            if(isAnswer = this.answer.classList.contains('answer__backlight')) delay = 3500;
+            let delay = 2000, wrongAnswer;
+            if(wrongAnswer = this.inputs[form].classList.contains('form__input_rejected')) delay = 3500;
             setTimeout(()=> {
-                if(isAnswer) {
+                if(wrongAnswer) {
+                    this.inputs[form].classList.remove('form__input_rejected');
                     this.answer.innerHTML = '';
                     this.answer.classList.remove('answer__backlight');
                 }
                 else {
-                    for (const input of this.inputs) {
-                        if(input.classList.contains('form__input_confirmed'))
-                            input.classList.remove('form__input_confirmed');
-                    }
+                    this.inputs[form].classList.remove('form__input_confirmed');
                 }
                 return resolve();
             }, delay);
@@ -173,9 +174,10 @@ class Controller {
             this.onConfirmAnswer(this.model.randomForm);
         }
         else {
+            this.onRejectAnswer(this.model.randomForm);
             this.onDisplayAnswer(this.model.randomVerb, this.model.randomForm);
         }
-        await this.onResetMessage();
+        await this.onResetMessage(this.model.randomForm);
         this.onSetRandomVerbData();
         this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm, this.model.nativeVerb);
     };
@@ -191,7 +193,8 @@ class Controller {
     onCheckAnswer = answer => this.model.checkAnswer(answer);
     onDisplayAnswer = (verb, form) => this.view.displayAnswer(verb, form);
     onConfirmAnswer = form => this.view.confirmAnswer(form);
-    onResetMessage = () => this.view.resetMessage();
+    onRejectAnswer = form => this.view.rejectAnswer(form);
+    onResetMessage = form => this.view.resetMessage(form);
 }
 
 const runApp = new Controller(new Model('../data/data.json'), new View());
