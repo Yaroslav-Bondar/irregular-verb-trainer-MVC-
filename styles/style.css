@@ -7,6 +7,9 @@
     --color-6: #ba776d;
     --color-7: #dc8d7c;
     --color-8: #dbc680;
+    --color-9: #9a8170;
+    --color-10:#9c9d9d;
+/* } */
 
 	/* --color-dark: #a1a1a1;
 	--color-unaccent: #808080;
@@ -31,16 +34,30 @@
 body {
     background-color: var(--color-1);
     margin: 0;
-}
+} 
 #root {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-flow: column;
-    max-width: 1300px;
+    display: grid;
+    grid-template-areas: 'header'
+                         'main'
+                         'footer';
+    grid-template-rows: 70px 1fr 40px;
+    max-width: 800px;
     height: 100vh;
     padding: 0 15px;
     margin: 0 auto;
+}
+.header {
+    grid-area: header;
+}
+.main {
+    grid-area: main;
+    display: flex;
+    justify-content: center;
+    padding-top: 20%;
+
+}
+.footer {
+    grid-area: footer;
 }
 .spinner__container {
     position: fixed;
@@ -54,6 +71,7 @@ body {
     background-color: #d65c5c;
 }
 .error__container {
+    /* position: absolute; */
     width: 100%;
     height: 100vh;
     display: flex;
@@ -70,16 +88,18 @@ body {
 }
 .verb__native {
     margin-bottom: 20px;
-    text-align: center;
-    color: #9a8170;
+    color: var(--color-9);
 }
 .answer {
     height: 15px;
-    margin-top: 20px;
+    margin: 20px auto 0 auto;
     text-align: center;
 }
 .answer__backlight {
     color: var(--color-8);
+}
+.form {
+    text-align: center;
 }
 .form__input,
 .answer {
@@ -108,4 +128,34 @@ body {
     color: var(--color-5);
     text-decoration: line-through;
     border-bottom: 1px solid var(--color-5);
+}
+.footer {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+}
+.statistics {
+
+}
+.statistics__column:not(:last-child) {
+    margin-right: 10px;
+}
+.statistics__name {
+    color: var(--color-10);
+}
+.statistics__incorrect,
+.statistics__correct,
+.statistics__all {
+    padding: 2px;
+    border-radius: 2px;
+    background-color: var(--color-2);
+}
+.statistics__correct {
+    color: var(--color-4);
+}
+.statistics__incorrect {
+    color: var(--color-6);
+}
+.statistics__all {
+    color: var(--color-8);
 }
