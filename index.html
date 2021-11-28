@@ -9,18 +9,69 @@
     <title>Irregular verbs trainer</title>
 </head>
 <body>
-    
-    <div id="root"></div>
-    <!-- <div class="statistics">
-        <span class="statistics__name">incorrect</span>
-        <span class="statistics__value"></span>
-        <span class="statistics__name">correct</span>
-        <span class="statistics__value"></span>
-        <span class="statistics__name">all</span>
-        <span class="statistics__value"></span>
-    </div> -->
+    <div class="spinner">
+        <div class="spinner__container">
+            <svg width="200" height="200" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                    viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
+                <path fill="gray" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                    <animateTransform 
+                        attributeName="transform" 
+                        attributeType="XML" 
+                        type="rotate"
+                        dur="1s" 
+                        from="0 50 50"
+                        to="360 50 50" 
+                        repeatCount="indefinite" 
+                    />
+                </path>
+            </svg>
+        </div>
+    </div>
+    <header class="header">
+        <div class="wrapper">
+            <div class="header__container">
 
+            </div>
+        </div>
+    </header>
+    <main class="main">
+        <div class="wrapper">
+            <div class="main__container">
+                <form class="form">
+                    <div class="verb__native"></div>
+                    <input class="form__input" type="text">
+                    <input class="form__input" type="text">
+                    <input class="form__input" type="text">
+                    <div class="answer"></div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="wrapper">
+            <div class="footer__container">
+                <div class="statistics">
+                    <span class="statistics__column">
+                        <span class="statistics__name">incorrect</span>
+                        <span class="statistics__incorrect"></span>
+                    </span>
+                    <span class="statistics__column">
+                        <span class="statistics__name">correct</span>
+                        <span class="statistics__correct"></span>
+                    </span>
+                    <span class="statistics__column">
+                        <span class="statistics__name">total</span>
+                        <span class="statistics__total"></span>
+                    </span>
+                    <span class="statistics__column">
+                        <span class="statistics__name">loaded</span>
+                        <span class="statistics__loaded"></span>
+                    </span>
+                </div>
+            </div>    
+        </div>
+    </footer>
 <!-- <script src="js/view/constantsView.js"></script> -->
-<script src="js/script.js"></script>    
+    <script src="js/script.js"></script>    
 </body>
 </html>

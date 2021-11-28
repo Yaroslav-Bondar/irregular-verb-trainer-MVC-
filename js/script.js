@@ -3,9 +3,12 @@ class Model {
         this.verbsUrl = verbsUrl;
         this.checkInputReg = /^\s*[a-z]+\s*$/i;
         this.answer;
-        this.allAnswers = 0;
-        this.correctAnswers = 0;
-        this.wrongAnswers = 0;
+        this.statistics = {
+            incorrect: 0,
+            correct: 0,
+            total: 0,
+            loaded: 0,
+        }
         // this.verbs; this.randomVerb; this.randomForm; this.nativeVerb; // property list
     }
     get MAX_VERB_INDEX() {   // constant inside the class
@@ -17,7 +20,11 @@ class Model {
     loadVerbs() {
         return fetch(this.verbsUrl)
             .then(res => res.json())
-            .then(verbs => this.verbs = verbs)
+            .then(verbs => {
+                this.verbs = verbs;
+                this.statistics.loaded = verbs.length;
+                return verbs;
+            })
             .catch(error => { throw new Error(error) });/* { (===) or return Promise.reject(error) } */
     }
     getRandomNumber = max => Math.floor(Math.random() * max);
@@ -36,45 +43,33 @@ class Model {
         return checkInput && checkAnswer ? this.answer = true : this.answer = false;
     }
     updateStatistics() {
-        this.allAnswers++
+        this.statistics.total++;
         if(this.answer) {
-            this.correctAnswers++;
+            this.statistics.correct++;
         }
         else {
-            this.wrongAnswers++;
+            this.statistics.incorrect++;
         }
-        console.log(this.allAnswers, this.correctAnswers, this.wrongAnswers);
     }
 };
 class View {
     constructor() {
-        this.root = document.getElementById('root');
-        this.spinner = this.createElement('div', 'spinner');
+        this.spinner = document.querySelector('.spinner'); 
         this.error = this.createElement('div', 'error');
-        this.root.append(this.spinner, this.error);
-    }
-    showSpinner() {
-        this.spinner.innerHTML = 
-        `<div class="spinner__container">
-            <svg width="200" height="200" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-            viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
-                <path fill="gray" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
-                    <animateTransform 
-                    attributeName="transform" 
-                    attributeType="XML" 
-                    type="rotate"
-                    dur="1s" 
-                    from="0 50 50"
-                    to="360 50 50" 
-                    repeatCount="indefinite" />
-                </path>
-            </svg>
-        <div>`;
+        this.form = document.querySelector('.form');
+        this.inputs = document.getElementsByClassName('form__input');
+        this.nativeVerbNode = document.querySelector('.verb__native');
+        this.answerNode = document.querySelector('.answer');
+        this.incorrect = document.querySelector('.statistics__incorrect');
+        this.correct = document.querySelector('.statistics__correct');
+        this.total = document.querySelector('.statistics__total');
+        this.loaded = document.querySelector('.statistics__loaded');
     }
     hideSpinner() {
-        this.spinner.innerHTML = '';
+        this.spinner.classList.add('spinner_hide');
     }
     showError(error) {
+        this.spinner.after(this.error);
         this.error.innerHTML = 
         `<div class="error__container">
             <div class="error__message">
@@ -84,52 +79,14 @@ class View {
             </div>
         </div>`;
     }
-    loadUI() {
-        return new Promise(resolve => {
-            this.wrapper = this.createElement('wrapper', 'wrapper');
-            this.header = this.createElement('header', 'header');
-            this.header.append(this.wrapper);
-            this.main = this.createElement('main', 'main');
-            this.main.append(this.wrapper);
-            this.footer = this.createElement('footer', 'footer');
-            this.footer.append(this.wrapper);
-            this.form = this.createElement('form', 'form');
-            this.input = this.createElement('input', 'form__input');
-            this.input.type = 'text';
-            this.nativeVerbNode = this.createElement('div', 'verb__native');
-            this.answer = this.createElement('div', 'answer');
-            // let statisticsHtml = '<span class="statistics__name">incorrect</span><span class="statistics__value"></span>';
-            this.statistics = this.createElement('div', 'statistics');
-            this.form.append(this.nativeVerbNode, ...this._createCloneElements(this.input, 3), this.answer);
-            this.main.append(this.form);
-            this.footer.append(this.statistics);
-            this.root.append(this.header, this.main, this.footer);
-            this.statistics.outerHTML = 
-            `<div class="statistics">
-                <span class="statistics__column">
-                    <span class="statistics__name">incorrect</span>
-                    <span class="statistics__incorrect"></span>
-                </span>
-                <span class="statistics__column">
-                    <span class="statistics__name">correct</span>
-                    <span class="statistics__correct"></span>
-                </span>
-                <span class="statistics__column">
-                    <span class="statistics__name">all</span>
-                    <span class="statistics__all"></span>
-                </span>
-            </div>`;
-            this.incorrect = document.querySelector('.statistics__incorrect');
-            this.correct = this.root.querySelector('.statistics__correct');
-            this.all = this.root.querySelector('.statistics__all');
-            this.inputs = this.root.getElementsByClassName('form__input');
-            resolve('UI is loaded');
-        });
-    }
-    displayStatistics(incorrect, correct, all) {
-        this.incorrect.innerHTML = `${incorrect}`;
-        this.correct.innerHTML = `${correct}`;
-        this.all.innerHTML = `${all}`;
+    displayStatistics(statistics) {
+        this.incorrect.innerHTML = statistics.incorrect;
+        this.correct.innerHTML = statistics.correct;
+        this.total.innerHTML = statistics.total;
+        if(!this.loaded.innerHTML) {
+            this.loaded.innerHTML = statistics.loaded;
+            console.log('only once');
+        }
     }
     loadDOM() {  
         return new Promise(resolve => {
@@ -170,8 +127,8 @@ class View {
         });
     }
     displayAnswer(verbs, form) {
-        this.answer.innerHTML = verbs[form];
-        this.answer.classList.add('answer__backlight');
+        this.answerNode.innerHTML = verbs[form];
+        this.answerNode.classList.add('answer__backlight');
     }
     confirmAnswer(form) {
         this.inputs[form].classList.add('form__input_confirmed');
@@ -188,8 +145,8 @@ class View {
             setTimeout(()=> {
                 if(wrongAnswer) {
                     this.inputs[form].classList.remove('form__input_rejected');
-                    this.answer.innerHTML = '';
-                    this.answer.classList.remove('answer__backlight');
+                    this.answerNode.innerHTML = '';
+                    this.answerNode.classList.remove('answer__backlight');
                 }
                 else {
                     this.inputs[form].classList.remove('form__input_confirmed');
@@ -203,18 +160,16 @@ class Controller {
     constructor(model, view) {
         this.model = model;
         this.view = view;
-        this.run(this.onLoadVerbs, this.onLoadDOM, this.onLoadUI);
+        this.run(this.onLoadVerbs, this.onLoadDOM);
     }
-    run(loadVerbs, loadDOM, loadUI) {
-        this.onSpinner();   
-        Promise.all([loadVerbs(), loadDOM(), loadUI()])  // tasks before launch
+    run(loadVerbs, loadDOM) {
+        Promise.all([loadVerbs(), loadDOM()])  // tasks before launch
         .finally(() => this.offSpinner())
         .then((res) => {
             console.log(res);
-            // this.onLoadUI();
             this.onSetRandomVerbData();
             this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm, this.model.nativeVerb);
-            this.onDisplayStatistics(this.model.wrongAnswers, this.model.correctAnswers, this.model.allAnswers);
+            this.onDisplayStatistics(this.model.statistics);
             this.view.bindEditVerb(this.bindHandleEditVerb);
         })
         .catch(error => {
@@ -231,18 +186,16 @@ class Controller {
             this.onDisplayAnswer(this.model.randomVerb, this.model.randomForm);
         }
         this.onUpdateStatistics();
-        this.onDisplayStatistics(this.model.wrongAnswers, this.model.correctAnswers, this.model.allAnswers);
+        this.onDisplayStatistics(this.model.statistics);
         await this.onResetMessage(this.model.randomForm);
         this.onSetRandomVerbData();
         this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm, this.model.nativeVerb);
     };
     bindHandleEditVerb = this.handleEditVerb.bind(this); // binding a context to a callback function
-    onSpinner = () => this.view.showSpinner();
     offSpinner = () => this.view.hideSpinner();
     onError = error => this.view.showError(error);
     onLoadVerbs = () => this.model.loadVerbs();
     onLoadDOM = () => this.view.loadDOM();
-    onLoadUI = () => this.view.loadUI();
     onSetRandomVerbData = () => this.model.setRandomVerbData();
     onDisplayVerbs = (verb, form, nativeVerb) => this.view.displayVerbs(verb, form, nativeVerb);
     onCheckAnswer = answer => this.model.checkAnswer(answer);
@@ -251,7 +204,7 @@ class Controller {
     onRejectAnswer = form => this.view.rejectAnswer(form);
     onResetMessage = form => this.view.resetMessage(form);
     onUpdateStatistics = () => this.model.updateStatistics();
-    onDisplayStatistics = (incorrect, correct, all) => this.view.displayStatistics(incorrect, correct, all);
+    onDisplayStatistics = statistics => this.view.displayStatistics(statistics);
 }
 
 const runApp = new Controller(new Model('../data/data.json'), new View());

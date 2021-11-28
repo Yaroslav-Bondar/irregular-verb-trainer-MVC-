@@ -28,37 +28,21 @@
 		0 6px 30px 5px rgba(33,37,41,.04), 
 		0 8px 10px -5px rgba(33,37,41,.1);
 }
-* {
+*,
+::after, 
+::before  {
     box-sizing: border-box;
 }
 body {
-    background-color: var(--color-1);
-    margin: 0;
-} 
-#root {
     display: grid;
     grid-template-areas: 'header'
                          'main'
                          'footer';
     grid-template-rows: 70px 1fr 40px;
-    max-width: 800px;
     height: 100vh;
-    padding: 0 15px;
-    margin: 0 auto;
-}
-.header {
-    grid-area: header;
-}
-.main {
-    grid-area: main;
-    display: flex;
-    justify-content: center;
-    padding-top: 20%;
-
-}
-.footer {
-    grid-area: footer;
-}
+    background-color: var(--color-1);
+    margin: 0;
+} 
 .spinner__container {
     position: fixed;
     top: 0;
@@ -70,9 +54,16 @@ body {
     height: 100vh; 
     background-color: #d65c5c;
 }
-.error__container {
-    /* position: absolute; */
+.spinner_hide {
+    display: none;
+}
+.error {
+    position: absolute;
     width: 100%;
+    height: 100vh;
+    background-color: #ba776d;
+}
+.error__container {
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -86,20 +77,30 @@ body {
     box-shadow: var(--box-shadow);
     color: var(--color-white);
 }
-.verb__native {
-    margin-bottom: 20px;
-    color: var(--color-9);
+.wrapper {
+    max-width: 1000px;
+    padding: 0 15px;
+    margin: 0 auto;
 }
-.answer {
-    height: 15px;
-    margin: 20px auto 0 auto;
-    text-align: center;
+.header {
+    grid-area: header;
+    background-color: #777c85;
 }
-.answer__backlight {
-    color: var(--color-8);
+.main {
+    grid-area: main;
+    padding-top: 20%;
+    
+}
+.main__container {
+    display: flex;
+    justify-content: center;
 }
 .form {
     text-align: center;
+}
+.verb__native {
+    margin-bottom: 20px;
+    color: var(--color-9);
 }
 .form__input,
 .answer {
@@ -117,9 +118,12 @@ body {
     border-bottom: 1px solid var(--color-3);
     outline: none;
 }
-.form__input:not(:last-child) { 
+/* .form.form__input:not(:last-child) { 
     margin-right: 15px;
 }
+.form__input:nth-child(3) { 
+    margin-right: 0px;
+} */
 .form__input_confirmed:focus {
     color: var(--color-4);
     border-bottom: 1px solid var(--color-4);
@@ -129,10 +133,23 @@ body {
     text-decoration: line-through;
     border-bottom: 1px solid var(--color-5);
 }
+.answer {
+    height: 15px;
+    margin: 20px auto 0 auto;
+    text-align: center;
+}
+.answer__backlight {
+    color: var(--color-8);
+}
 .footer {
+    grid-area: footer;
+    background-color: #777c85;
+}
+.footer__container {
     display: flex;
     align-items: center;
     padding: 10px 0;
+    
 }
 .statistics {
 
@@ -145,7 +162,8 @@ body {
 }
 .statistics__incorrect,
 .statistics__correct,
-.statistics__all {
+.statistics__total,
+.statistics__loaded {
     padding: 2px;
     border-radius: 2px;
     background-color: var(--color-2);
@@ -156,6 +174,6 @@ body {
 .statistics__incorrect {
     color: var(--color-6);
 }
-.statistics__all {
+.statistics__total {
     color: var(--color-8);
 }
