@@ -38,7 +38,7 @@ body {
     grid-template-areas: 'header'
                          'main'
                          'footer';
-    grid-template-rows: 70px 1fr 40px;
+    grid-template-rows: 70px 1fr auto;
     height: 100vh;
     background-color: var(--color-1);
     margin: 0;
@@ -78,7 +78,7 @@ body {
     color: var(--color-white);
 }
 .wrapper {
-    max-width: 1000px;
+    max-width: 1300px;
     padding: 0 15px;
     margin: 0 auto;
 }
@@ -89,28 +89,31 @@ body {
 .main {
     grid-area: main;
     padding-top: 20%;
-    
 }
 .main__container {
     display: flex;
     justify-content: center;
 }
 .form {
+    width: 100%;
     text-align: center;
 }
 .verb__native {
     margin-bottom: 20px;
     color: var(--color-9);
 }
-.form__input,
-.answer {
-    width: 120px;
+.form__input-wrapper {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-column-gap: 30px;
 }
 .form__input {
+    width: 100%; /* for responsive width of input tags */ 
     padding: 3px 2px;
     background-color: var(--color-2);
     color: var(--color-3);
     text-align: center;
+    font-size: 40px;
     border: none;
     border-radius: 3px;
 }
@@ -118,12 +121,7 @@ body {
     border-bottom: 1px solid var(--color-3);
     outline: none;
 }
-/* .form.form__input:not(:last-child) { 
-    margin-right: 15px;
-}
-.form__input:nth-child(3) { 
-    margin-right: 0px;
-} */
+
 .form__input_confirmed:focus {
     color: var(--color-4);
     border-bottom: 1px solid var(--color-4);
@@ -148,25 +146,58 @@ body {
 .footer__container {
     display: flex;
     align-items: center;
+    height: 55px;
     padding: 10px 0;
-    
 }
 .statistics {
-
 }
-.statistics__column:not(:last-child) {
+.statistics__column {
+    /* for delete whitespace after inline elements like <span>
+    give the font-size: 0 for parent element
+    and for its children font-size:[some value] */
+    font-size: 0; 
+}
+.statistics__answers {
+    margin-right: 40px;
+}
+.statistics__answers .statistics__column:not(:last-child) {
     margin-right: 10px;
 }
 .statistics__name {
     color: var(--color-10);
+    font-size: 12px; /* too for delete whitespace after inline elements like <span> */
 }
 .statistics__incorrect,
 .statistics__correct,
 .statistics__total,
 .statistics__loaded {
-    padding: 2px;
+    padding: 0 3px;
     border-radius: 2px;
     background-color: var(--color-2);
+    font-size: 12px;  /* too for delete whitespace after inline elements like <span> */
+}
+.statistics__answers,
+.statistics__verbs {
+    position: relative;
+    padding: 6px 7px;
+    border: 1px solid red;
+}
+.statistics__answers::before {
+    content: 'answers';
+}
+.statistics__verbs::before {
+    content: 'verbs';
+}
+.statistics__verbs::before,
+.statistics__answers::before {
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0 5px;
+    font-size: 15px;
+    line-height: 80%;
+    background-color: #777c85;
 }
 .statistics__correct {
     color: var(--color-4);
