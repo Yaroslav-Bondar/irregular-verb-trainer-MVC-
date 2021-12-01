@@ -88,7 +88,7 @@ body {
 }
 .main {
     grid-area: main;
-    padding-top: 20%;
+    padding-top: 12%;
 }
 .main__container {
     display: flex;
@@ -99,7 +99,8 @@ body {
     text-align: center;
 }
 .verb__native {
-    margin-bottom: 20px;
+    margin-bottom: 75px;
+    font-size: 30px;
     color: var(--color-9);
 }
 .form__input-wrapper {
@@ -133,7 +134,8 @@ body {
 }
 .answer {
     height: 15px;
-    margin: 20px auto 0 auto;
+    margin: 75px auto 0 auto;
+    font-size: 40px;
     text-align: center;
 }
 .answer__backlight {
@@ -146,12 +148,14 @@ body {
 .footer__container {
     display: flex;
     align-items: center;
-    height: 55px;
+    height: 60px;
     padding: 10px 0;
 }
 .statistics {
 }
 .statistics__column {
+    display: flex;
+    align-items: center;
     /* for delete whitespace after inline elements like <span>
     give the font-size: 0 for parent element
     and for its children font-size:[some value] */
@@ -165,7 +169,8 @@ body {
 }
 .statistics__name {
     color: var(--color-10);
-    font-size: 12px; /* too for delete whitespace after inline elements like <span> */
+    font-size: 14px; /* too for delete whitespace after inline elements like <span> */
+    margin-right: 7px;
 }
 .statistics__incorrect,
 .statistics__correct,
@@ -174,11 +179,12 @@ body {
     padding: 0 3px;
     border-radius: 2px;
     background-color: var(--color-2);
-    font-size: 12px;  /* too for delete whitespace after inline elements like <span> */
+    font-size: 18px;  /* too for delete whitespace after inline elements like <span> */
 }
 .statistics__answers,
 .statistics__verbs {
     position: relative;
+    display: inline-flex;
     padding: 6px 7px;
     border: 1px solid red;
 }

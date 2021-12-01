@@ -170,7 +170,7 @@ class Controller {
             this.onSetRandomVerbData();
             this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm, this.model.nativeVerb);
             this.onDisplayStatistics(this.model.statistics);
-            this.view.bindEditVerb(this.bindHandleEditVerb);
+            this.view.bindEditVerb(this.handleEditVerb.bind(this));
         })
         .catch(error => {
             this.onError(error.message);
@@ -191,7 +191,6 @@ class Controller {
         this.onSetRandomVerbData();
         this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm, this.model.nativeVerb);
     };
-    bindHandleEditVerb = this.handleEditVerb.bind(this); // binding a context to a callback function
     offSpinner = () => this.view.hideSpinner();
     onError = error => this.view.showError(error);
     onLoadVerbs = () => this.model.loadVerbs();
