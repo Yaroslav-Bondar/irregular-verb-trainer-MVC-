@@ -1,8 +1,12 @@
 :root {
-	--color-1: #2b2d35;
+	--carbon: #2d2d2d; 
+    /* #2b2d35; */
+    --lead:#202020;
 	--color-2: #41403e;
-    --color-3: #589ace;
-    --color-4: #42a587;
+    --danube: #6ab0f3; 
+    /* #589ace; */
+    --york: #92d192;
+    /* #42a587; */
     --color-5: #575b64;
     --color-6: #ba776d;
     --color-7: #dc8d7c;
@@ -38,9 +42,9 @@ body {
     grid-template-areas: 'header'
                          'main'
                          'footer';
-    grid-template-rows: 70px 1fr auto;
+    grid-template-rows: auto 1fr auto;
     height: 100vh;
-    background-color: var(--color-1);
+    background-color: var(--carbon);
     margin: 0;
 } 
 .spinner__container {
@@ -84,15 +88,40 @@ body {
 }
 .header {
     grid-area: header;
-    background-color: #777c85;
+    background-color: var(--lead);
+}
+.header__container {
+    display: flex;
+    align-items: center;
+    height: 70px;
+}
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 5px solid green;
+    background-color: hotpink;
+}
+.logo::after {
+    content: 'Irregular verb trainer';
+    position: absolute;
+    width: max-content;
+    left: 100%;
+    bottom: 0;
+    margin-left: 12px;
 }
 .main {
     grid-area: main;
-    padding-top: 12%;
 }
-.main__container {
+.trainer {
     display: flex;
     justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 .form {
     width: 100%;
@@ -112,20 +141,19 @@ body {
     width: 100%; /* for responsive width of input tags */ 
     padding: 3px 2px;
     background-color: var(--color-2);
-    color: var(--color-3);
+    color: var(--danube);
     text-align: center;
-    font-size: 40px;
+    font-size: 42px;
     border: none;
-    border-radius: 3px;
+    border-radius: 33px;
 }
 .form__input:focus {
-    border-bottom: 1px solid var(--color-3);
+    border-bottom: 1px solid var(--danube);
     outline: none;
 }
-
 .form__input_confirmed:focus {
-    color: var(--color-4);
-    border-bottom: 1px solid var(--color-4);
+    color: var(--york);
+    border-bottom: 1px solid var(--york);
 }
 .form__input_rejected:focus {
     color: var(--color-5);
@@ -143,7 +171,7 @@ body {
 }
 .footer {
     grid-area: footer;
-    background-color: #777c85;
+    background-color: var(--lead);
 }
 .footer__container {
     display: flex;
@@ -187,6 +215,7 @@ body {
     display: inline-flex;
     padding: 6px 7px;
     border: 1px solid red;
+    border-radius: 5px;
 }
 .statistics__answers::before {
     content: 'answers';
@@ -206,11 +235,116 @@ body {
     background-color: #777c85;
 }
 .statistics__correct {
-    color: var(--color-4);
+    color: var(--york);
 }
 .statistics__incorrect {
     color: var(--color-6);
 }
 .statistics__total {
     color: var(--color-8);
+}
+@media screen and (max-width: 1024px) {
+    .form__input-wrapper {
+        grid-column-gap: 20px;
+    }
+    .form__input {
+        font-size: 38px;
+    }
+}
+@media screen and (max-width: 768px) {
+    .form__input-wrapper {
+        grid-column-gap: 15px;
+    }
+    .form__input {
+        font-size: 33px;
+    }
+}
+@media screen and (max-width: 880px) {
+    .form__input {
+        font-size: 36px;
+    }
+}
+/* height and width */
+@media screen and (max-height: 750px) and (max-width: 950px) {
+    .header__container {
+        height: 50px;
+    }
+    .logo {
+        height: 35px;
+        width: 35px;
+        border: 3px solid green;
+    }
+    .verb__native {
+        margin-bottom: 44px;
+        font-size: 25px;
+    }
+    .form__input {
+        font-size: 30px;
+    }
+    .answer {
+        margin-top: 44px;
+        font-size: 25px;
+    }
+    .footer__container {
+        height: 48px;
+    }
+    .statistics__name {
+        font-size: 12px;
+    }
+    .statistics__incorrect,
+    .statistics__correct,
+    .statistics__total,
+    .statistics__loaded {
+        font-size: 15px;  
+    }
+    .statistics__verbs::before,
+    .statistics__answers::before {
+        font-size: 12px;
+    }
+    .statistics__answers,
+    .statistics__verbs {
+        padding: 2px 2px;
+    }
+}
+@media screen and (min-height: 750px) {
+    @media screen and (max-width: 678px) {
+        .form__input-wrapper {
+            grid-template-columns: 80%;
+            justify-content: center;
+            grid-row-gap: 35px;
+        }
+        .form__input {
+            font-size: 35px;
+        }
+    }
+    @media screen and (max-width: 480px) {
+        .form__input-wrapper {
+            grid-template-columns: 100%;
+            grid-row-gap: 30px;
+        }
+        .form__input {
+            font-size: 30px;
+        }
+        .verb__native {
+            margin-bottom: 50px;
+            font-size: 27px;
+        }
+        .answer {
+            margin: 50px auto 0 auto;
+            font-size: 35px;
+        }
+    }
+    @media screen and (max-width: 320px) {
+        .form__input {
+            font-size: 27px;
+        }
+        .verb__native {
+            margin-bottom: 40px;
+            font-size: 23px;
+        }
+        .answer {
+            margin: 40px auto 0 auto;
+            font-size: 30px;
+        }
+    }
 }
