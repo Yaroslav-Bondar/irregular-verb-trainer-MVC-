@@ -85,7 +85,6 @@ class View {
         this.total.innerHTML = statistics.total;
         if(!this.loaded.innerHTML) {
             this.loaded.innerHTML = statistics.loaded;
-            console.log('only once');
         }
     }
     loadDOM() {  
@@ -95,11 +94,11 @@ class View {
             });
         });
     }
-    _createCloneElements(element, amount) {
-        let elements = [];
-        while(amount--) elements.push(element.cloneNode(true));
-        return elements;
-    }
+    // _createCloneElements(element, amount) {
+    //     let elements = [];
+    //     while(amount--) elements.push(element.cloneNode(true));
+    //     return elements;
+    // }
     createElement(tag, className) {
         const element = document.createElement(tag);
         if(className) element.classList.add(className);
@@ -128,7 +127,7 @@ class View {
     }
     displayAnswer(verbs, form) {
         this.answerNode.innerHTML = verbs[form];
-        this.answerNode.classList.add('answer__backlight');
+        // this.answerNode.classList.add('answer__backlight');
     }
     confirmAnswer(form) {
         this.inputs[form].classList.add('form__input_confirmed');
@@ -146,7 +145,7 @@ class View {
                 if(wrongAnswer) {
                     this.inputs[form].classList.remove('form__input_rejected');
                     this.answerNode.innerHTML = '';
-                    this.answerNode.classList.remove('answer__backlight');
+                    // this.answerNode.classList.remove('answer__backlight');
                 }
                 else {
                     this.inputs[form].classList.remove('form__input_confirmed');
