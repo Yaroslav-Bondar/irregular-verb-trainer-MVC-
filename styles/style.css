@@ -277,9 +277,14 @@ body {
     object-fit: cover;
 }
 .footer__social-link {
-    width: 40px;
-    height: 40px;
-    background-color: var(--color-2);
+    width: 37px;
+    height: 37px;
+    transition: .2s transform;
+    /* background-color: var(--color-2); */
+}
+.footer__social-link:focus {
+    transform: scale(1.15);
+    outline: none;
 }
 .footer__social-link:not(:last-child) {
     margin-right: 20px;
