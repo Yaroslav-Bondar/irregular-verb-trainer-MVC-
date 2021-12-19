@@ -1,3 +1,5 @@
+@import 'common.css';
+@import 'media_queries.css';
 :root {
 	--carbon: #2d2d2d; 
     /* #2b2d35; */
@@ -298,6 +300,29 @@ body {
 .footer__social-link:not(:last-child) {
     margin-right: 20px;
 }
+.header__burger {
+    height: 25px;
+    width: 35px;
+}
+.header__burger-line,
+.header__burger-line::before,
+.header__burger-line::after {
+    content: '';
+    position: absolute;
+    height: 5px;
+    width: 100%;
+    background-color: #ba776d;
+}
+.header__burger-line::before {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.header__burger-line::after {
+    /* position: absolute; */
+    bottom: 0;
+    top: 100%;
+}
 @keyframes shake {
     0% { transform: translate(1px, 1px) rotate(0deg); }
     10% { transform: translate(-1px, -2px) rotate(-1deg); }
@@ -311,6 +336,7 @@ body {
     90% { transform: translate(1px, 2px) rotate(0deg); }
     100% { transform: translate(1px, -2px) rotate(-1deg); }
 }
+
 @media screen and (min-height: 500px) and (max-width: 600px) {
     .form__input-wrapper {
         grid-template-columns: 80%;

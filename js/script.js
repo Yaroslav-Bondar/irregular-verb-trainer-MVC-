@@ -205,4 +205,4 @@ class Controller {
     onDisplayStatistics = statistics => this.view.displayStatistics(statistics);
 }
 
-const runApp = new Controller(new Model('../data/data.json'), new View());
+const runApp = new Controller(new Model('data/data.json'), new View());

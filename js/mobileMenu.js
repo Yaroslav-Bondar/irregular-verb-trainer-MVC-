@@ -2,6 +2,8 @@ const trainer = document.querySelector('.trainer');
 const statistics = document.querySelector('.statistics');
 const header = document.querySelector('.header');
 
+// been able must be fix
+
 function setProperty(a, b, width, property) {
     if(window.innerWidth <= width) {
         a.style[`${property}`] = b.offsetHeight + 'px';
