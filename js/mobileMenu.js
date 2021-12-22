@@ -1,8 +1,10 @@
 const trainer = document.querySelector('.trainer');
 const statistics = document.querySelector('.statistics');
 const header = document.querySelector('.header');
-
-// been able must be fix
+const headerBurger = document.querySelector('.header__burger');
+headerBurger.addEventListener('click', ()=> {
+    statistics.classList.toggle('statistics__active');
+});
 
 function setProperty(a, b, width, property) {
     if(window.innerWidth <= width) {

@@ -1,7 +1,8 @@
 @import 'common.css';
 @import 'media_queries.css';
 :root {
-	--carbon: #2d2d2d; 
+	--carbon: #2d2d2d;
+    --shaft: #242424; 
     /* #2b2d35; */
     --lead:#202020;
 	--color-2: #41403e;
@@ -104,6 +105,7 @@ body {
 .header__container {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     height: 70px;
 }
 .logo {
@@ -206,6 +208,10 @@ body {
     padding: 10px 0;
 }
 .statistics {
+    transition: right .3s;
+}
+.statistics__active {
+    right: 0 !important;
 }
 .statistics__column {
     display: flex;
@@ -287,7 +293,6 @@ body {
     width: 37px;
     height: 37px;
     transition: .2s transform;
-    /* background-color: var(--color-2); */
 }
 .footer__social-link:focus {
     transform: scale(1.15);
@@ -301,27 +306,27 @@ body {
     margin-right: 20px;
 }
 .header__burger {
+    display: none;
     height: 25px;
     width: 35px;
+    cursor: pointer;
 }
 .header__burger-line,
-.header__burger-line::before,
-.header__burger-line::after {
+.header__burger::before,
+.header__burger::after {
     content: '';
     position: absolute;
     height: 5px;
     width: 100%;
-    background-color: #ba776d;
+    border-radius: 2px;
+    background-color: var(--edward);
 }
-.header__burger-line::before {
+.header__burger::before {
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateY(-50%);
 }
-.header__burger-line::after {
-    /* position: absolute; */
+.header__burger::after {
     bottom: 0;
-    top: 100%;
 }
 @keyframes shake {
     0% { transform: translate(1px, 1px) rotate(0deg); }
@@ -399,9 +404,19 @@ body {
 }
 @media screen and (max-width: 565px) {
     .statistics {
-        position: absolute;
+        position: fixed;
         top: 60px;
-        right: 0;
-        background-color: #fca369;
+        right: -200%;
+        padding: var(--spacing-medium);
+        padding-top: 50px;
+        text-align: center;
+        background-color: var(--shaft);
+    }
+    .statistics > span:not(:last-child) {
+        display: flex;
+        margin: 0 0 30px 0;
+    }
+    .header__burger {
+        display: block;
     }
 }
