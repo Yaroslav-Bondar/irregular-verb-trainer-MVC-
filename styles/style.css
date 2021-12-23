@@ -1,5 +1,43 @@
 @import 'common.css';
 @import 'media_queries.css';
+@font-face {
+    font-family: "LeckerliOne Regular";
+	src: url("../fonts/leckerli_one/LeckerliOne_Regular.ttf");
+    font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: "Noto Sans Display Condensed";
+	src: url("../fonts/noto_sans_display_condensed/noto_sans_display_condensed.eot"); /* IE9 Compat Modes */
+	src: url("../fonts/noto_sans_display_condensed/noto_sans_display_condensed.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+		url("../fonts/noto_sans_display_condensed/noto_sans_display_condensed.otf") format("opentype"), /* Open Type Font */
+		url("../fonts/noto_sans_display_condensed/noto_sans_display_condensed.svg") format("svg"), /* Legacy iOS */
+		url("../fonts/noto_sans_display_condensed/noto_sans_display_condensed.ttf") format("truetype"), /* Safari, Android, iOS */
+		url("../fonts/noto_sans_display_condensed/noto_sans_display_condensed.woff") format("woff"), /* Modern Browsers */
+		url("../fonts/noto_sans_display_condensed/noto_sans_display_condensed.woff2") format("woff2"); /* Modern Browsers */
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: "Monospace 821 Win95BT";
+	src: url("../fonts/monospace_821_win95bt/monospace_821_win95bt.eot"); /* IE9 Compat Modes */
+	src: url("../fonts/monospace_821_win95bt/monospace_821_win95bt.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+		url("../fonts/monospace_821_win95bt/monospace_821_win95bt.otf") format("opentype"), /* Open Type Font */
+		url("../fonts/monospace_821_win95bt/monospace_821_win95bt.svg") format("svg"), /* Legacy iOS */
+		url("../fonts/monospace_821_win95bt/monospace_821_win95bt.ttf") format("truetype"), /* Safari, Android, iOS */
+		url("../fonts/monospace_821_win95bt/monospace_821_win95bt.woff") format("woff"), /* Modern Browsers */
+		url("../fonts/monospace_821_win95bt/monospace_821_win95bt.woff2") format("woff2"); /* Modern Browsers */
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('../fonts/jetbrains_mono/Jetbrainsmonoregular.woff2') format('woff2'), 
+        url('../fonts/jetbrains_mono/Jetbrainsmonoregular.woff') format('woff'), 
+        url('../fonts/jetbrains_mono/Jetbrainsmonoregular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
 :root {
 	--carbon: #2d2d2d;
     --shaft: #242424; 
@@ -56,6 +94,7 @@ body {
     height: 100vh;
     background-color: var(--carbon);
     margin: 0;
+    /* font-family: "Noto Sans Display Condensed"; */
 } 
 .spinner__container {
     position: fixed;
@@ -108,30 +147,27 @@ body {
     justify-content: space-between;
     height: 70px;
 }
-.logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+
+.header__logo {
     width: 45px;
     height: 45px;
-    border-radius: 50%;
+    font-family: "LeckerliOne Regular";
+    font-weight: normal;
+	font-style: normal;
+    font-size: 18px;
     border: 3px solid var(--edward);
     background-color: var(--carbon);
+    color: var(--edward);
 }
-.logo::after {
+.header__logo::after {
     content: 'Irregular verb trainer';
     position: absolute;
     width: max-content;
     left: 100%;
     bottom: 0;
     margin-left: 12px;
-    font-size: 15px;
     color: var(--edward);
 }
-/* .main {
-    grid-area: main;
-} */
 .trainer {
     grid-area: trainer;
     display: flex;
@@ -150,6 +186,13 @@ body {
 .form {
     width: 100%;
     text-align: center;
+}
+.form,
+.form__input {
+    font-family: "Noto Sans Display Condensed";
+    font-weight: normal;
+    font-style: normal;
+    letter-spacing: 1px;
 }
 .verb__native {
     /* margin-bottom: 75px; */
@@ -208,6 +251,9 @@ body {
     padding: 10px 0;
 }
 .statistics {
+    font-family: "Monospace 821 Win95BT";
+    font-weight: normal;
+	font-style: normal;
     transition: right .3s;
 }
 .statistics__active {
@@ -238,6 +284,9 @@ body {
 .statistics__loaded {
     padding: 0 3px;
     border-radius: 2px;
+    font-family: 'JetBrains Mono';
+    font-weight: 400;
+    font-style: normal;
     font-size: 18px;  /* too for delete whitespace after inline elements like <span> */
     color: var(--orange);
     background-color: var(--color-2);
@@ -418,5 +467,10 @@ body {
     }
     .header__burger {
         display: block;
+    }
+}
+@media screen and (max-width: 420px) {
+    .header__logo::after {
+        font-size: 12px;
     }
 }
