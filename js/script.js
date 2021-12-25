@@ -72,10 +72,10 @@ class View {
         this.spinner.after(this.error);
         this.error.innerHTML = 
         `<div class="error__container">
-            <div class="error__message">
-                <h3>No acces !!!</h3>
-                <h5>${error}</h5>
-                <p>please try again later</p>
+            <div class="error__wrapper">
+                <h2 class="error__title">&#x1F621; No acces !!!</h2>
+                <p class="error__message">${error}</p>
+                <h4>please try again later</h4>
             </div>
         </div>`;
     }
@@ -205,4 +205,4 @@ class Controller {
     onDisplayStatistics = statistics => this.view.displayStatistics(statistics);
 }
 
-const runApp = new Controller(new Model('data/data.json'), new View());
+const runApp = new Controller(new Model('dat/data.json'), new View());
