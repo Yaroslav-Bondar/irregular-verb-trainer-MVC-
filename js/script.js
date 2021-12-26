@@ -127,7 +127,6 @@ class View {
     }
     displayAnswer(verbs, form) {
         this.answerNode.innerHTML = verbs[form];
-        // this.answerNode.classList.add('answer__backlight');
     }
     confirmAnswer(form) {
         this.inputs[form].classList.add('form__input_confirmed');
@@ -145,7 +144,6 @@ class View {
                 if(wrongAnswer) {
                     this.inputs[form].classList.remove('form__input_rejected');
                     this.answerNode.innerHTML = '';
-                    // this.answerNode.classList.remove('answer__backlight');
                 }
                 else {
                     this.inputs[form].classList.remove('form__input_confirmed');
@@ -205,4 +203,4 @@ class Controller {
     onDisplayStatistics = statistics => this.view.displayStatistics(statistics);
 }
 
-const runApp = new Controller(new Model('dat/data.json'), new View());
+const runApp = new Controller(new Model('data/data.json'), new View());
