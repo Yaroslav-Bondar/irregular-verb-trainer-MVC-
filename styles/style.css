@@ -112,7 +112,7 @@
     /* margin-bottom: 75px; */
     /* font-size: 30px; */
     font-size: calc(1rem + 1.9vw);
-    color: var(--color-9);
+    color: var(--arrowtown);
 }
 .form__input-wrapper {
     display: grid;
@@ -124,14 +124,14 @@
     width: 100%; /* for responsive width of input tags */ 
     padding: 3px 2px;
     background-color: var(--merlin);
-    color: var(--color-6);
+    color: var(--old-rose);
     text-align: center;
     font-size: calc(1.1rem + 1.5vw);
     border: none;
     border-radius: 33px;
 }
 .form__input:focus {
-    border-bottom: 1px solid var(--color-6);
+    border-bottom: 1px solid var(--old-rose);
     outline: none;
 }
 .form__input_confirmed:focus {
@@ -139,15 +139,15 @@
     border-bottom: 1px solid var(--york);
 }
 .form__input_rejected:focus {
-    color: var(--color-5);
+    color: var(--shuttle-gray);
     text-decoration: line-through;
-    border-bottom: 1px solid var(--color-5);
+    border-bottom: 1px solid var(--shuttle-gray);
 }
 .answer {
     height: calc(1rem + 1.9vw); /* eliminates jump when displaing the answer */
     /* and for vertically the content of the parent container */
     font-size: calc(1rem + 1.9vw);
-    color: var(--color-8);
+    color: var(--calico);
 }
 .footer {
     grid-area: footer;
