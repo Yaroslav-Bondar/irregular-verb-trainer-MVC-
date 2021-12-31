@@ -1,7 +1,7 @@
 class Model {
     constructor(verbsUrl) {
         this.verbsUrl = verbsUrl;
-        this.checkInputReg = /^\s*[a-z]+\s*$/i;
+        this.checkInputReg = /^\s*[a-z]+[ ]?[a-z]+\s*$/i;
         this.answer;
         this.statistics = {
             incorrect: 0,
