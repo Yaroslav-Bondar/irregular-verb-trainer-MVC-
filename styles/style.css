@@ -60,7 +60,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 70px;
+    height: var(--header-height);
 }
 .header__logo {
     width: 45px;
@@ -87,7 +87,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* height: 100%; */
 }
 .trainer .wrapper {
     width: 100%;
@@ -304,7 +303,7 @@
  @media screen and (max-height: 500px),
         screen and (max-width: 700px) {
     .footer__container {
-        height: 50px;
+        height: var(--footer-height);
     }
     .statistics__name {
         font-size: 12px;
@@ -356,7 +355,8 @@
 @media screen and (max-width: 565px) {
     .statistics {
         position: fixed;
-        top: 60px;
+        top: var(--header-height);
+        bottom: var(--footer-height);
         right: -200%;
         padding: var(--spacing-medium);
         padding-top: 50px;

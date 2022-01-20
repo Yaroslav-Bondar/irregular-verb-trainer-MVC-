@@ -2,14 +2,12 @@ class Model {
     constructor(verbsUrl) {
         this.verbsUrl = verbsUrl;
         this.checkInputReg = /^\s*[a-z]+[ ]?[a-z]+\s*$/i;
-        this.answer;
         this.statistics = {
             incorrect: 0,
             correct: 0,
             total: 0,
             loaded: 0,
         }
-        // this.verbs; this.randomVerb; this.randomForm; this.nativeVerb; // property list
     }
     get MAX_VERB_INDEX() {   // constant inside the class
         return 3;
@@ -64,9 +62,17 @@ class View {
         this.correct = document.querySelector('.statistics__correct');
         this.total = document.querySelector('.statistics__total');
         this.loaded = document.querySelector('.statistics__loaded');
+        this.headerBurger = document.querySelector('.header__burger');
+        this.statistics = document.querySelector('.statistics');
+        this._initLocalListeners();
     }
     hideSpinner() {
         this.spinner.classList.add('spinner_hide');
+    }
+    _initLocalListeners() {
+        this.headerBurger.addEventListener('click', ()=> {
+            this.statistics.classList.toggle('statistics__active');
+        });
     }
     showError(error) {
         this.spinner.after(this.error);
@@ -94,11 +100,6 @@ class View {
             });
         });
     }
-    // _createCloneElements(element, amount) {
-    //     let elements = [];
-    //     while(amount--) elements.push(element.cloneNode(true));
-    //     return elements;
-    // }
     createElement(tag, className) {
         const element = document.createElement(tag);
         if(className) element.classList.add(className);
@@ -163,7 +164,6 @@ class Controller {
         Promise.all([loadVerbs(), loadDOM()])  // tasks before launch
         .finally(() => this.offSpinner())
         .then((res) => {
-            console.log(res);
             this.onSetRandomVerbData();
             this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm, this.model.nativeVerb);
             this.onDisplayStatistics(this.model.statistics);
@@ -175,18 +175,24 @@ class Controller {
         })
     };
     async handleEditVerb(answer) {
-        if(this.onCheckAnswer(answer)) {
-            this.onConfirmAnswer(this.model.randomForm);
+        try {
+            if(this.onCheckAnswer(answer)) {
+                this.onConfirmAnswer(this.model.randomForm);
+            }
+            else {
+                this.onRejectAnswer(this.model.randomForm);
+                this.onDisplayAnswer(this.model.randomVerb, this.model.randomForm);
+            }
+            this.onUpdateStatistics();
+            this.onDisplayStatistics(this.model.statistics);
+            await this.onResetMessage(this.model.randomForm);
+            this.onSetRandomVerbData();
+            this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm, this.model.nativeVerb);
         }
-        else {
-            this.onRejectAnswer(this.model.randomForm);
-            this.onDisplayAnswer(this.model.randomVerb, this.model.randomForm);
+        catch(error) {
+            this.onError(error.message);
+            console.log(error.stack); 
         }
-        this.onUpdateStatistics();
-        this.onDisplayStatistics(this.model.statistics);
-        await this.onResetMessage(this.model.randomForm);
-        this.onSetRandomVerbData();
-        this.onDisplayVerbs(this.model.randomVerb, this.model.randomForm, this.model.nativeVerb);
     };
     offSpinner = () => this.view.hideSpinner();
     onError = error => this.view.showError(error);
