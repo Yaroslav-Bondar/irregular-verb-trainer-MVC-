@@ -9,10 +9,10 @@ Languages: JavaScript
 Environments: MVC design pattern, HTML, CSS 
 
 Features: 
-  responsive/adaptive UI design
-  storing verbs in json file
-  statistics on answers and loaded verbs
-  user input validation
+  responsive/adaptive UI design,
+  storing verbs in json file,
+  statistics on answers and loaded verbs,
+  user input validation,
   
 How to use:
   download the repository and run index.html
