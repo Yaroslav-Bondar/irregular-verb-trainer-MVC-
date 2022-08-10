@@ -14,8 +14,8 @@ Features:
   statistics on answers and loaded verbs,
   user input validation,
   
-How to use:
-  download the repository and run index.html
+How to start:
+  download the repository and run index.html in the root folder
 
 links: 
   Build a Simple MVC App From Scratch in JavaScript: https://www.taniarascia.com/javascript-mvc-todo-app/
