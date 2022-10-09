@@ -1,4 +1,4 @@
-# English irregular verb trainer
+# :open_book: English irregular verb trainer
 
 ## Description: 
  Web application for better memorization of irregular English verbs. The program prompts the user to enter the correct version of one of the forms of the    verb. It then validates the entered data and displays the result. It is possible to expand the list of verbs by editing the json file.
@@ -11,13 +11,31 @@
 
 ## How to edit the list of verbs:
   - you can edit list of verbs in [/data/data.json](data/data.json)
-  - you can also store a list of verbs on a remote server. And get it using the Rest Api by specifying the URL in [/js/script.js](js/script.js) in the     controller call line like:
+
+  - you can also store a list of verbs on a remote server. And get it using Rest Api by sending a Get request. The URL for the request can be specified in [/js/script.js](js/script.js) in the controller call line like:
   
   `/js/script.js`
   
  ``` javascript
  const runApp = new Controller(new Model('data/data.json'), new View());
  ```
+the implementation of the GET request is defined in the model method in [/js/script.js](js/script.js):
+
+`/js/script.js`
+
+ ``` javascript
+ loadVerbs() {
+     return fetch(this.verbsUrl)
+         .then(res => res.json())
+         .then(verbs => {
+             this.verbs = verbs;
+             this.statistics.loaded = verbs.length;
+             return verbs;
+         })
+         .catch(error => { throw new Error(error) });/* { (===) or return Promise.reject(error) } */
+ }
+ ```
+
 > **Warning**: It is not recommended to change the structure of the json file with the list of verbs, since the program code is adapted for it.
 
 ## Purposes:
