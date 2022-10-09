@@ -10,10 +10,19 @@
   - clone the repository and run index.html in the root folder
 
 ## How to edit the list of verbs:
-  > - you can edit list of verbs in [local json data file](data/data.json)
-  > - or get it using the Rest Api by specifying the URL in the [file](js/script.js) in the controller call line like: const runApp = new Controller(new Model('data/data.json'), new View()); 
+  - you can edit list of verbs in [/data/data.json](data/data.json)
+  - you can also store a list of verbs on a remote server. And get it using the Rest Api by specifying the URL in [/js/script.js](js/script.js) in the     controller call line like:
   
+  `/js/script.js`
+  
+ ``` javascript
+ const runApp = new Controller(new Model('data/data.json'), new View());
+ ```
+> **Warning**: It is not recommended to change the structure of the json file with the list of verbs, since the program code is adapted for it.
+
 ## Purposes:
+  - When I started learning English irregular verbs, I had paper and a pen. I also wanted to practice writing programs with the MVC pattern, and automate     the process of learning verbs already without paper and pen -). This is how this small but very useful program arose.
+  
   - Learning the basics of the MVC design patterns:
     - Model - manages the data of an application
     - View - a visual representation of the model
@@ -47,8 +56,7 @@
 
 ## Design pattern: 
   - MVC
-  - creating objects with java script classes
-
+ 
 ## Features: 
   - responsive/adaptive UI design
   - storing verbs in json file
