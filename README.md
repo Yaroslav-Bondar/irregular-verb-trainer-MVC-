@@ -62,8 +62,8 @@ the implementation of the GET request is defined in the model method in [/js/scr
       - form validation
       - work with DOM
     - Layout:
-      - responsive/adaptive UI design
-      - mobile-first media queries
+      - responsive/adaptive UI design 
+      - desktop-first media queries
       - CSS Flexbox/Grid
       - naming classes according to BEM methodology
     
