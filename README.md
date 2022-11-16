@@ -10,8 +10,8 @@
   - clone the repository and run index.html in the root folder
 
 ## How to edit the list of verbs:
+> **Warning**: It is not recommended to change the structure of the json file with the list of verbs, since the program code is adapted for it.
   - you can edit list of verbs in [/data/data.json](data/data.json)
-
   - you can also store a list of verbs on a remote server. And get it using Rest Api by sending a Get request. The URL for the request can be specified in [/js/script.js](js/script.js) in the controller call line like:
   
   `/js/script.js`
@@ -36,7 +36,6 @@ the implementation of the GET request is defined in the model method in [/js/scr
  }
  ```
 
-> **Warning**: It is not recommended to change the structure of the json file with the list of verbs, since the program code is adapted for it.
 
 ## Purposes:
   - When I started learning English irregular verbs, I had paper and a pen. I also wanted to practice writing programs with the MVC pattern, and automate     the process of learning verbs already without paper and pen -). This is how this small but very useful program arose.
