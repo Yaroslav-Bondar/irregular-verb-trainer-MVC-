@@ -1,0 +1,30 @@
+{
+  "name": "irregular-verb-trainer",
+  "version": "1.0.0",
+  "description": "Irregular verb trainer",
+  "main": "index.js",
+  "scripts": {
+    "lint": "npx eslint ./src/js",
+    "lint:fix": "npm run lint -- --fix",
+    "prettier": "npx prettier . --check",
+    "prettier:fix": "npm run prettier -- --write",
+    "format": "npm run prettier:fix && npm run lint:fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yaroslav-Bondar/irregular-verb-trainer-MVC-.git"
+  },
+  "author": "Yaroslav Bondar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Yaroslav-Bondar/irregular-verb-trainer-MVC-/issues"
+  },
+  "homepage": "https://github.com/Yaroslav-Bondar/irregular-verb-trainer-MVC-#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "eslint": "^9.18.0",
+    "globals": "^15.14.0",
+    "prettier": "3.4.2"
+  }
+}

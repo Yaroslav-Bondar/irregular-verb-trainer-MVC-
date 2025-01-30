@@ -1,0 +1,377 @@
+@import 'common.css';
+@import 'fonts.css';
+
+.spinner__container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--shuttle-gray);
+  z-index: 5;
+}
+.spinner_hide {
+  display: none;
+}
+.error {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  z-index: 10;
+}
+.error_active {
+  display: block;
+}
+.error__container {
+  height: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-medium);
+  background-color: var(--shuttle-gray);
+}
+.error__wrapper {
+  max-width: 650px;
+  padding: var(--spacing-large);
+  text-align: center;
+  font-family: 'Monospace 821 Win95BT';
+  font-weight: normal;
+  font-style: normal;
+  color: beige;
+  border: thick double beige;
+  box-shadow: var(--box-shadow);
+  background-color: var(--bright-red);
+}
+.error__message {
+  color: burlywood;
+}
+.wrapper {
+  max-width: 1300px;
+  padding: 0 15px;
+  margin: 0 auto;
+}
+.header {
+  grid-area: header;
+  background-color: var(--lead);
+}
+.header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-height);
+}
+.header__logo {
+  width: 45px;
+  height: 45px;
+  font-family: 'LeckerliOne Regular';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 18px;
+  border: 3px solid var(--edward);
+  background-color: var(--carbon);
+  color: var(--edward);
+}
+.header__logo::after {
+  content: 'Irregular verb trainer';
+  position: absolute;
+  width: max-content;
+  left: 100%;
+  bottom: 0;
+  margin-left: 12px;
+  color: var(--edward);
+}
+.trainer {
+  grid-area: trainer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.trainer .wrapper {
+  width: 100%;
+}
+.trainer__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.form {
+  width: 100%;
+  text-align: center;
+}
+.form,
+.form__input {
+  font-family: 'Noto Sans Display Condensed';
+  font-weight: normal;
+  font-style: normal;
+  letter-spacing: 1px;
+}
+.verb__native {
+  font-size: calc(1rem + 1.9vw);
+  color: var(--arrowtown);
+}
+.form__input-wrapper {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-column-gap: 2%;
+  margin: 14vh 0;
+}
+.form__input {
+  width: 100%; /* for responsive width of input tags */
+  padding: 3px 2px;
+  background-color: var(--merlin);
+  color: var(--old-rose);
+  text-align: center;
+  font-size: calc(1.1rem + 1.5vw);
+  border: none;
+  border-radius: 33px;
+}
+.form__input:focus {
+  border-bottom: 1px solid var(--old-rose);
+  outline: none;
+}
+.form__input_confirmed {
+  color: var(--york);
+  border-bottom: 1px solid var(--york);
+}
+.form__input_rejected {
+  color: var(--shuttle-gray);
+  text-decoration: line-through;
+  border-bottom: 1px solid var(--bright-red);
+}
+.answer {
+  height: calc(1rem + 1.9vw); /* eliminates jump when displaing the answer */
+  /* and for vertically the content of the parent container */
+  font-size: calc(1rem + 1.9vw);
+  color: var(--calico);
+}
+.footer {
+  grid-area: footer;
+  background-color: var(--lead);
+}
+.footer__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+  padding: 10px 0;
+}
+.statistics {
+  font-family: 'Monospace 821 Win95BT';
+  font-weight: normal;
+  font-style: normal;
+  transition: right 0.3s;
+}
+.statistics__active {
+  right: 0 !important;
+}
+.statistics__column {
+  display: flex;
+  align-items: center;
+  /* for delete whitespace after inline elements like <span>
+    give the font-size: 0 for parent element
+    and for its children font-size:[some value] */
+  font-size: 0;
+}
+.statistics__answers {
+  margin-right: 40px;
+}
+.statistics__answers .statistics__column:not(:last-child) {
+  margin-right: 10px;
+}
+.statistics__name {
+  color: var(--edward);
+  font-size: 14px; /* for delete whitespace after inline elements like <span> */
+  margin-right: 7px;
+}
+.statistics__incorrect,
+.statistics__correct,
+.statistics__total,
+.statistics__loaded {
+  padding: 0 3px;
+  border-radius: 2px;
+  font-family: 'JetBrains Mono';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px; /* for delete whitespace after inline elements like <span> */
+  color: var(--orange);
+  background-color: var(--merlin);
+}
+.statistics__answers,
+.statistics__verbs {
+  position: relative;
+  display: inline-flex;
+  padding: 6px 7px;
+  border: 1px solid var(--merlin);
+  border-radius: 5px;
+}
+.statistics__answers::before {
+  content: 'answers';
+}
+.statistics__verbs::before {
+  content: 'verbs';
+}
+.statistics__verbs::before,
+.statistics__answers::before {
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 5px;
+  font-size: 13px;
+  line-height: 80%;
+  color: var(--edward);
+  background-color: var(--lead);
+}
+.statistics__correct {
+  color: var(--york);
+}
+.statistics__incorrect {
+  color: var(--red-light);
+}
+.statistics__total {
+  color: var(--orange);
+}
+.social {
+  display: flex;
+}
+.social__link {
+  display: block;
+  border-radius: 50%;
+}
+.social__icon {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.footer__social-link {
+  width: 37px;
+  height: 37px;
+  transition: 0.2s transform;
+}
+.footer__social-link:focus {
+  transform: scale(1.15);
+  outline: none;
+}
+.footer__social-link:hover {
+  animation: shake 0.5s;
+  animation-iteration-count: infinite;
+}
+.footer__social-link:not(:last-child) {
+  margin-right: 20px;
+}
+.header__burger {
+  display: none;
+  height: 25px;
+  width: 35px;
+  cursor: pointer;
+}
+.header__burger-line,
+.header__burger::before,
+.header__burger::after {
+  content: '';
+  position: absolute;
+  height: 5px;
+  width: 100%;
+  border-radius: 2px;
+  background-color: var(--edward);
+}
+.header__burger::before {
+  top: 50%;
+  transform: translateY(-50%);
+}
+.header__burger::after {
+  bottom: 0;
+}
+
+@media screen and (min-height: 500px) and (max-width: 600px) {
+  .form__input-wrapper {
+    grid-template-columns: 80%;
+    justify-content: center;
+    grid-row-gap: 5vh;
+    margin: 8vh 0;
+  }
+  @media screen and (max-width: 420px) {
+    .form__input-wrapper {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+@media screen and (max-height: 500px), screen and (max-width: 700px) {
+  .footer__container {
+    height: var(--footer-height);
+  }
+  .statistics__name {
+    font-size: 12px;
+  }
+  .statistics__incorrect,
+  .statistics__correct,
+  .statistics__total,
+  .statistics__loaded {
+    font-size: 15px;
+  }
+  .statistics__answers {
+    margin-right: 32px;
+  }
+  .statistics__verbs::before,
+  .statistics__answers::before {
+    font-size: 12px;
+  }
+  .statistics__answers,
+  .statistics__verbs {
+    padding: 4px 5px;
+  }
+  .footer__social-link {
+    width: 30px;
+    height: 30px;
+  }
+  .footer__social-link:not(:last-child) {
+    margin-right: 10px;
+  }
+}
+@media screen and (max-height: 500px) {
+  .header__container {
+    height: 60px;
+  }
+  .header__logo {
+    width: 40px;
+    height: 40px;
+  }
+  @media screen and (max-height: 380px) {
+    .form__input-wrapper {
+      margin: 7vh 0;
+    }
+  }
+}
+@media screen and (max-width: 730px) {
+  .error__wrapper {
+    width: 95%;
+  }
+}
+@media screen and (max-width: 565px) {
+  .statistics {
+    position: fixed;
+    top: var(--header-height);
+    bottom: var(--footer-height);
+    right: -200%;
+    padding: var(--spacing-medium);
+    padding-top: 50px;
+    text-align: center;
+    background-color: var(--shaft);
+  }
+  .statistics > span:not(:last-child) {
+    display: flex;
+    margin: 0 0 30px 0;
+  }
+  .header__burger {
+    display: block;
+  }
+}
+@media screen and (max-width: 420px) {
+  .header__logo::after {
+    font-size: 12px;
+  }
+}
