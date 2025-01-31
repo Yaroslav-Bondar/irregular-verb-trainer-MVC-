@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="../assets/img/favicon-192x192.png"
+    />
+    <link rel="stylesheet" href="styles/style.css" />
+    <title>Irregular verbs trainer</title>
+  </head>
+  <body>
+    <div class="spinner">
+      <div class="spinner__container">
+        <svg
+          width="200"
+          height="200"
+          version="1.1"
+          id="L9"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 100 100"
+          enable-background="new 0 0 0 0"
+          xml:space="preserve"
+        >
+          <path
+            fill="#6ab0f3"
+            d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50"
+          >
+            <animateTransform
+              attributeName="transform"
+              attributeType="XML"
+              type="rotate"
+              dur="1s"
+              from="0 50 50"
+              to="360 50 50"
+              repeatCount="indefinite"
+            />
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="error">
+      <div class="error__container">
+        <div class="error__wrapper">
+          <h2 class="error__title">&#x1F621; No acces !!!</h2>
+          <p class="error__message"></p>
+          <h4>please try again later</h4>
+        </div>
+      </div>
+    </div>
+    <header class="header">
+      <div class="wrapper">
+        <div class="header__container">
+          <div class="logo header__logo">V</div>
+          <div class="burger header__burger">
+            <div class="burger__line header__burger-line"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <section class="trainer">
+      <div class="wrapper">
+        <div class="trainer__container">
+          <form class="form">
+            <div class="verb__native"></div>
+            <div class="form__input-wrapper">
+              <input class="form__input" type="text" />
+              <input class="form__input" type="text" />
+              <input class="form__input" type="text" />
+            </div>
+            <div class="answer"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="wrapper">
+        <div class="footer__container">
+          <div class="statistics">
+            <span class="statistics__answers">
+              <span class="statistics__column">
+                <span class="statistics__name">incorrect</span>
+                <span class="statistics__incorrect"></span>
+              </span>
+              <span class="statistics__column">
+                <span class="statistics__name">correct</span>
+                <span class="statistics__correct"></span>
+              </span>
+              <span class="statistics__column">
+                <span class="statistics__name">total</span>
+                <span class="statistics__total"></span>
+              </span>
+            </span>
+            <span class="statistics__verbs">
+              <span class="statistics__column">
+                <span class="statistics__name">loaded</span>
+                <span class="statistics__loaded"></span>
+              </span>
+            </span>
+          </div>
+          <div class="social footer__social">
+            <a
+              href="https://github.com/Yaroslav-Bondar/irregular-verb-trainer-MVC-"
+              class="social__link footer__social-link"
+              target="_blank"
+              title="project repository"
+              accesskey="g"
+            >
+              <img
+                src="../assets/img/icons/social/github.svg"
+                alt="gitHab_icon"
+                class="social__icon footer__social-icon"
+              />
+            </a>
+            <a
+              href="https://twitter.com/yarobond"
+              class="social__link footer__social-link"
+              target="_blank"
+              title="my twitter"
+              accesskey="t"
+            >
+              <img
+                src="../assets/img/icons/social/twitter.svg"
+                alt="twitter_icon"
+                class="social__icon footer__social-icon"
+              />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/yaroslav-bondar-7014a021b/"
+              class="social__link footer__social-link"
+              target="_blank"
+              title="my linkedin"
+              accesskey="l"
+            >
+              <img
+                src="../assets/img/icons/social/linkedin.svg"
+                alt="linkedin_icon"
+                class="social__icon footer__social-icon"
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script type="module" src="./js/index.js"></script>
+  </body>
+</html>
