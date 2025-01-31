@@ -7,33 +7,34 @@
   - [View the demo](https://yaroslav-bondar.github.io/irregular-verb-trainer-MVC-/)
   
 ## How to run the application:
-  - clone the repository and run index.html in the root folder
+  - clone the repository and run index.html in the src folder
 
 ## How to edit the list of verbs:
 > **Warning**: It is not recommended to change the structure of the json file with the list of verbs, since the program code is adapted for it.
-  - you can edit list of verbs in [/data/data.json](data/data.json)
-  - you can also store a list of verbs on a remote server. And get it using Rest Api by sending a Get request. The URL for the request can be specified in [/js/script.js](js/script.js) in the controller call line like:
+  - you can edit list of verbs in [assets/data/data.json](assets/data/data.json)
+  - you can also store a list of verbs on a remote server. And get it using Rest Api by sending a Get request. The request URL can be specified, for example, in [src/js/index.js](src/js/index.js) in the model constructor call line, like this:
   
-  `/js/script.js`
+  `src/js/index.js`
   
  ``` javascript
- const runApp = new Controller(new Model('data/data.json'), new View());
+ const runApp = new Controller(new Model('assets/data/data.json'), new View());
  ```
-the implementation of the GET request is defined in the model method in [/js/script.js](js/script.js):
+the implementation of the GET request is defined in the model method in [src/js/model/index.js](src/js/model/index.js):
 
-`/js/script.js`
+`src/js/model/index.js`
 
  ``` javascript
- loadVerbs() {
-     return fetch(this.verbsUrl)
-         .then(res => res.json())
-         .then(verbs => {
-             this.verbs = verbs;
-             this.statistics.loaded = verbs.length;
-             return verbs;
-         })
-         .catch(error => { throw new Error(error) });/* { (===) or return Promise.reject(error) } */
- }
+ async loadVerbs(callback) {
+    try {
+      const response = await fetch(this.#dataUrl);
+      this.#verbs = await response.json();
+      this.#store.common.loaded = this.#verbs.length;
+      callback();
+    } catch (error) {
+      console.error(error);
+      callback(error);
+    }
+  }
  ```
 
 
@@ -82,7 +83,8 @@ the implementation of the GET request is defined in the model method in [/js/scr
   
 ### Thanks:
   - [Build a Simple MVC App From Scratch in JavaScript](https://www.taniarascia.com/javascript-mvc-todo-app/)
-  - [Java script book](https://learn.javascript.ru/) 
+  - [Java script book](https://javascript.info/)
+  - [Mdn web docs](https://developer.mozilla.org/en-US/) 
 
 ### Author:
   [Yaroslav Bondar](https://www.linkedin.com/in/yaroslav-bondar-7014a021b/)
